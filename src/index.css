@@ -1,0 +1,30 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #B8860B;
+  --gold-light: #D4A017;
+  --gold-pale: #FDF6E3;
+  --gold-border: #E8C96A;
+  --brown-dark: #2C1A0E;
+  --brown-mid: #4A2C1A;
+  --text-dark: #1A1009;
+  --text-mid: #5C3D1E;
+  --text-light: #8C6D4F;
+  --white: #FFFDF9;
+  --off-white: #FAF7F0;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+ul { list-style: none; }
