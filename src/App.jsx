@@ -23,15 +23,15 @@ function App() {
 
       <Footer />
 
-      {/* ✅ WhatsApp Button */}
       <a
         href="https://wa.me/919840686575"
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-btn"
       >
-        WhatsApp
+        Chat on WhatsApp
       </a>
+
     </BrowserRouter>
   );
 }
