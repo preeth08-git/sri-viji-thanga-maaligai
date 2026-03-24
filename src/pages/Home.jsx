@@ -1,5 +1,4 @@
 import React from "react";
-import "../index.css"; // make sure this exists
 
 function Home() {
   return (
