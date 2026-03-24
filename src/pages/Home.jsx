@@ -3,16 +3,16 @@ import React from "react";
 function Home() {
   return (
     <section className="hero">
-      <div className="hero-content">
-        <h1>Quality Gold Jewellery You Can Trust</h1>
+      <div className="container">
+        <h1 className="title">Quality Gold Jewellery You Can Trust</h1>
 
-        <p>
+        <p className="subtitle">
           We offer pure gold jewellery with simple and beautiful designs for every occasion.
         </p>
 
-        <div className="hero-buttons">
-          <button className="btn-primary">View Collections</button>
-          <button className="btn-secondary">Contact Us</button>
+        <div className="buttons">
+          <button className="btn">View Collections</button>
+          <button className="btn outline">Contact Us</button>
         </div>
       </div>
     </section>

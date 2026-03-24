@@ -1,66 +1,22 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
-import styles from './Navbar.module.css'
+import { Link } from "react-router-dom";
 
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/collections', label: 'Collections' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-]
-
-export default function Navbar() {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const { pathname } = useLocation()
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => { setOpen(false) }, [pathname])
-
+function Navbar() {
   return (
-    <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.inner}>
-        <Link to="/" className={styles.brand}>
-          <span className={styles.brandTop}>Sri Viji</span>
-          <span className={styles.brandBottom}>Thanga Maaligai</span>
-        </Link>
+    <nav className="navbar">
+      <div className="nav-container">
+        
+        <h2 className="logo">Sri Viji Thanga Maaligai</h2>
 
-        <nav className={styles.nav}>
-          {links.map(l => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`${styles.link} ${pathname === l.to ? styles.active : ''}`}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/collections">Collections</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+        </div>
 
-        <button className={styles.hamburger} onClick={() => setOpen(o => !o)} aria-label="Toggle menu">
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
       </div>
-
-      {open && (
-        <nav className={styles.mobileNav}>
-          {links.map(l => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`${styles.mobileLink} ${pathname === l.to ? styles.active : ''}`}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-      )}
-    </header>
-  )
+    </nav>
+  );
 }
+
+export default Navbar;
