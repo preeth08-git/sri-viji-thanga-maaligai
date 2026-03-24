@@ -1,19 +1,22 @@
 import React from "react";
+import "./Home.css"; // make sure this exists
 
 function Home() {
   return (
-    <div className="home-container">
-      <h1>Quality Gold Jewellery You Can Trust</h1>
+    <section className="hero">
+      <div className="hero-content">
+        <h1>Quality Gold Jewellery You Can Trust</h1>
 
-      <p>
-        We offer pure gold jewellery with simple and beautiful designs for every occasion.
-      </p>
+        <p>
+          We offer pure gold jewellery with simple and beautiful designs for every occasion.
+        </p>
 
-      <div className="buttons">
-        <button>View Collections</button>
-        <button>Contact Us</button>
+        <div className="hero-buttons">
+          <button className="btn-primary">View Collections</button>
+          <button className="btn-secondary">Contact Us</button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
