@@ -1,18 +1,40 @@
-/* HERO */
+\/* HERO */
 .hero {
   background: #fff8f0;
   padding: 60px 20px;
+}
+
+.hero .container {
+  max-width: 900px;
+  margin: 0 auto;
   text-align: center;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #1a1009;
+}
+
+.hero p {
+  color: #555;
+  margin-bottom: 20px;
 }
 
 /* INFO SECTION */
 .info {
   padding: 40px 20px;
+}
+
+.info .container {
+  max-width: 900px;
+  margin: 0 auto;
   text-align: center;
 }
 
 .info h2 {
   margin-bottom: 10px;
+  font-size: 1.5rem;
 }
 
 .info p {
