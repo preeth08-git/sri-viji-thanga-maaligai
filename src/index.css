@@ -1,5 +1,11 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+/* Variables */
 :root {
   --gold: #B8860B;
   --gold-light: #D4A017;
@@ -15,29 +21,13 @@
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Jost', sans-serif;
 }
-.hero {
-  padding: 80px 20px;
-  text-align: center;
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
 }
 
-.hero-content h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-.hero-content p {
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-}
-
-.hero-buttons button {
-  margin: 10px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-html { scroll-behavior: smooth; }
-
+/* FIXED BODY + LAYOUT */
 body {
   font-family: var(--sans);
   background: var(--white);
@@ -45,6 +35,49 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { text-decoration: none; color: inherit; }
-img { display: block; max-width: 100%; }
-ul { list-style: none; }
+/* 🔥 IMPORTANT FIX (removes empty space issue) */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make content take full space */
+main {
+  flex: 1;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Images */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+}
+
+/* Buttons (simple styling) */
+button {
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+.whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 14px;
+}
