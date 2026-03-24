@@ -11,10 +11,10 @@ function Collections() {
         </p>
 
         <div className="product-grid">
-          <div className="card">Chains</div>
-          <div className="card">Rings</div>
-          <div className="card">Bangles</div>
-          <div className="card">Necklaces</div>
+          <div className="card">Gold Chains</div>
+          <div className="card">Gold Rings</div>
+          <div className="card">Gold Bangles</div>
+          <div className="card">Gold Necklaces</div>
         </div>
       </div>
     </section>
