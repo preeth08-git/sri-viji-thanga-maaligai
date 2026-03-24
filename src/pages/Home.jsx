@@ -6,7 +6,6 @@ function Home() {
 
   return (
     <>
-      {/* HERO */}
       <section className="hero">
         <div className="container">
           <h1 className="title">Quality Gold Jewellery You Can Trust</h1>
@@ -27,14 +26,12 @@ function Home() {
         </div>
       </section>
 
-      {/* SIMPLE INFO SECTION */}
       <section className="info">
         <div className="container">
           <h2>Trusted Jewellery Shop in Chennai</h2>
 
           <p>
-            We provide pure gold jewellery with fair pricing and good customer service.
-            Visit our shop or contact us for more details.
+            We provide pure gold jewellery with fair pricing and good service.
           </p>
         </div>
       </section>
