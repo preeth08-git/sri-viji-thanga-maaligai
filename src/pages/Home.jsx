@@ -27,31 +27,15 @@ function Home() {
         </div>
       </section>
 
-      {/* PRODUCTS PREVIEW */}
-      <section className="products">
+      {/* SIMPLE INFO SECTION */}
+      <section className="info">
         <div className="container">
-          <h2>Our Jewellery</h2>
+          <h2>Trusted Jewellery Shop in Chennai</h2>
 
-          <div className="product-grid">
-            <div className="card">Gold Chains</div>
-            <div className="card">Rings</div>
-            <div className="card">Bangles</div>
-            <div className="card">Necklaces</div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY CHOOSE US */}
-      <section className="why">
-        <div className="container">
-          <h2>Why Choose Us</h2>
-
-          <div className="why-grid">
-            <div>✔ Pure Gold</div>
-            <div>✔ Fair Price</div>
-            <div>✔ Trusted Shop</div>
-            <div>✔ Good Service</div>
-          </div>
+          <p>
+            We provide pure gold jewellery with fair pricing and good customer service.
+            Visit our shop or contact us for more details.
+          </p>
         </div>
       </section>
     </>

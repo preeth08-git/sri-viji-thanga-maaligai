@@ -1,46 +1,22 @@
-/* PRODUCTS */
-.products {
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.card {
-  padding: 20px;
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 6px;
-}
-
-/* WHY SECTION */
-.why {
-  padding: 40px 20px;
+/* HERO */
+.hero {
   background: #fff8f0;
+  padding: 60px 20px;
   text-align: center;
 }
 
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
-  margin-top: 20px;
+/* INFO SECTION */
+.info {
+  padding: 40px 20px;
+  text-align: center;
 }
 
-/* WHATSAPP BUTTON (BETTER UI) */
-.whatsapp-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #25D366;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 50px;
-  font-size: 14px;
-  text-decoration: none;
+.info h2 {
+  margin-bottom: 10px;
+}
+
+.info p {
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
 }
