@@ -202,3 +202,26 @@ body {
   border-radius: 50px;
   text-decoration: none;
 }
+/* FILTER BUTTONS */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 14px;
+  border: 1px solid #b8860b;
+  background: transparent;
+  color: #b8860b;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.filter-btn:hover {
+  background: #b8860b;
+  color: white;
+}
