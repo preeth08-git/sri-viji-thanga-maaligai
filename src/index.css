@@ -14,9 +14,9 @@ body {
   color: #222;
 }
 
-/* LAYOUT */
+/* CONTAINER */
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -31,7 +31,6 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 15px 20px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -107,6 +106,62 @@ body {
   max-width: 600px;
   margin: 0 auto;
   color: #555;
+}
+
+/* PAGE (Collections + Contact) */
+.page {
+  padding: 50px 20px;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.page-text {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* PRODUCT GRID */
+.product-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  background: #2c1a0e;
+  color: #f5e6c8;
+  padding: 40px 20px;
+}
+
+.footer a {
+  color: #f5e6c8;
+}
+
+.footer .colTitle {
+  color: #d4a017;
+  margin-bottom: 10px;
+}
+
+.footer .bottom {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #cbb89d;
 }
 
 /* WHATSAPP */

@@ -11,7 +11,6 @@ function App() {
     <BrowserRouter>
       <Navbar />
 
-      {/* 🔥 IMPORTANT WRAPPER */}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,9 +28,8 @@ function App() {
         rel="noopener noreferrer"
         className="whatsapp-btn"
       >
-        Chat on WhatsApp
+        WhatsApp
       </a>
-
     </BrowserRouter>
   );
 }
