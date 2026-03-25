@@ -1,7 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { Clock, MapPin, Phone } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({ navigate }) {
   const year = new Date().getFullYear();
 
   return (
@@ -17,24 +16,20 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 style={{ color: "#C8A33A", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "16px" }}>
-              Quick Links
-            </h3>
+            <h3 style={{ color: "#C8A33A", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "16px" }}>Quick Links</h3>
             <ul className="space-y-2">
-              {[{ to: "/", label: "Home" }, { to: "/collections", label: "Collections" }, { to: "/contact", label: "Contact Us" }].map((link) => (
-                <li key={link.to}>
-                  <Link to={link.to} style={{ color: "#D7C28A", fontSize: "0.875rem", textDecoration: "none" }}>
+              {[{ key: "home", label: "Home" }, { key: "collections", label: "Collections" }, { key: "contact", label: "Contact Us" }].map((link) => (
+                <li key={link.key}>
+                  <button onClick={() => navigate(link.key)} style={{ color: "#D7C28A", fontSize: "0.875rem", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                     {link.label}
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 style={{ color: "#C8A33A", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "16px" }}>
-              Contact
-            </h3>
+            <h3 style={{ color: "#C8A33A", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "16px" }}>Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <MapPin size={14} style={{ color: "#C8A33A", marginTop: 3, flexShrink: 0 }} />
