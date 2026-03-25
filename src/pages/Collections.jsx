@@ -14,11 +14,12 @@ export default function Collections() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   return (
-    <div style={{ backgroundColor: "#F7F1E4", minHeight: "70vh" }} className="py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10">
+    <div style={{ backgroundColor: "#F7F1E4", minHeight: "70vh", padding: "48px 0" }}>
+      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ marginBottom: "40px" }}>
           {view === "items" && (
-            <button type="button" onClick={() => { setView("categories"); setSelectedCategory(null); }} style={{ color: "#C8A33A", border: "1.5px solid #C8A33A", borderRadius: "6px", padding: "8px 16px", fontSize: "0.85rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "6px", backgroundColor: "transparent", cursor: "pointer", marginBottom: "20px" }}>
+            <button type="button" onClick={() => { setView("categories"); setSelectedCategory(null); }}
+              style={{ color: "#C8A33A", border: "1.5px solid #C8A33A", borderRadius: "6px", padding: "8px 16px", fontSize: "0.85rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "6px", backgroundColor: "transparent", cursor: "pointer", marginBottom: "20px" }}>
               <ArrowLeft size={15} /> Back to Categories
             </button>
           )}
@@ -32,11 +33,12 @@ export default function Collections() {
         </div>
 
         {view === "categories" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px" }}>
             {categories.map((cat) => (
-              <button key={cat.name} type="button" onClick={() => { setSelectedCategory(cat); setView("items"); }} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
+              <button key={cat.name} type="button" onClick={() => { setSelectedCategory(cat); setView("items"); }}
+                style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
                 <div style={{ height: "160px", background: cat.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem" }}>{cat.icon}</div>
-                <div className="p-5 text-center">
+                <div style={{ padding: "20px", textAlign: "center" }}>
                   <h3 style={{ color: "#2B1A12", fontSize: "0.95rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>{cat.name}</h3>
                   <p style={{ color: "#6B5A4B", fontSize: "0.75rem", marginBottom: "16px" }}>{cat.itemCount} items</p>
                   <span style={{ border: "1.5px solid #C8A33A", color: "#C8A33A", borderRadius: "999px", padding: "6px 20px", fontSize: "0.82rem", fontWeight: 600, display: "inline-block" }}>Browse</span>
@@ -47,11 +49,12 @@ export default function Collections() {
         )}
 
         {view === "items" && selectedCategory && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "16px" }}>
             {selectedCategory.items.map((item) => (
-              <button key={item.id} type="button" onClick={() => setSelectedItem(item)} style={{ border: "1.5px solid #D7C28A", borderRadius: "10px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
+              <button key={item.id} type="button" onClick={() => setSelectedItem(item)}
+                style={{ border: "1.5px solid #D7C28A", borderRadius: "10px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
                 <div style={{ height: "110px", background: item.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2rem" }}>{selectedCategory.icon}</div>
-                <div className="p-3 text-center">
+                <div style={{ padding: "12px", textAlign: "center" }}>
                   <h4 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: 600, marginBottom: "4px" }}>{item.name}</h4>
                   <p style={{ color: "#6B5A4B", fontSize: "0.75rem" }}>{item.karat} · {item.weight}</p>
                 </div>
@@ -65,22 +68,24 @@ export default function Collections() {
         <>
           <div onClick={() => setSelectedItem(null)} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(43,26,18,0.75)", zIndex: 100 }} />
           <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#FAF6EE", border: "1.5px solid #D7C28A", borderRadius: "14px", overflow: "hidden", zIndex: 101, width: "min(400px, 92vw)", boxShadow: "0 20px 60px rgba(43,26,18,0.4)" }}>
-            <button type="button" onClick={() => setSelectedItem(null)} style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.7)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}>
+            <button type="button" onClick={() => setSelectedItem(null)}
+              style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.7)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}>
               <X size={16} />
             </button>
             <div style={{ height: "220px", background: selectedItem.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4.5rem" }}>{selectedCategory?.icon}</div>
-            <div className="p-6">
+            <div style={{ padding: "24px" }}>
               <h3 style={{ color: "#2B1A12", fontSize: "1.3rem", fontWeight: "bold", marginBottom: "4px" }}>{selectedItem.name}</h3>
               <div style={{ width: 40, height: 2, backgroundColor: "#C8A33A", borderRadius: 1, marginBottom: "16px" }} />
-              <div className="space-y-3">
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {[{ label: "Karat", value: selectedItem.karat }, { label: "Weight", value: selectedItem.weight }, { label: "Quality", value: "BIS Hallmark" }].map((row) => (
-                  <div key={row.label} className="flex justify-between items-center py-2 px-3 rounded-md" style={{ backgroundColor: "#F0E8D4" }}>
+                  <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", borderRadius: "6px", backgroundColor: "#F0E8D4" }}>
                     <span style={{ color: "#6B5A4B", fontSize: "0.875rem", fontWeight: 500 }}>{row.label}</span>
                     <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: "bold" }}>{row.value}</span>
                   </div>
                 ))}
               </div>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: "20px", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px", textAlign: "center", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}>
+              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+                style={{ display: "block", marginTop: "20px", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px", textAlign: "center", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}>
                 Enquire on WhatsApp
               </a>
             </div>
