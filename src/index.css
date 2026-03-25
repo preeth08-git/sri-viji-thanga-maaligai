@@ -225,3 +225,36 @@ body {
   background: #b8860b;
   color: white;
 }
+/* NAVBAR BUTTON STYLE (MATCH HOME) */
+.nav-links a {
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: #b8860b;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  border: 1px solid #b8860b;
+  background: #fff8f0;
+}
+
+/* LIST VIEW (ALL FILTER) */
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.product-list .card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+}
+
+.product-list img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+}
