@@ -7,9 +7,10 @@ const categories = [
   { name: "Necklaces", description: "Elegant necklaces for every occasion", icon: "📿", gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)" },
 ];
 
-export default function Home({ navigate }) {
+export default function Home({ setPage }) {
   return (
     <div>
+      {/* Hero */}
       <section style={{ background: "linear-gradient(135deg, #2B1A12 0%, #3A241A 40%, #6B4A1A 70%, #8B6914 100%)", minHeight: "520px" }} className="flex items-center">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-xl">
@@ -23,10 +24,10 @@ export default function Home({ navigate }) {
               We have beautiful gold jewellery for every occasion — weddings, festivals, and daily wear.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button onClick={() => navigate("collections")} style={{ backgroundColor: "#C8A33A", color: "#2B1A12", borderRadius: "6px", padding: "12px 28px", fontWeight: 700, fontSize: "0.95rem", display: "inline-flex", alignItems: "center", gap: "6px", border: "none", cursor: "pointer" }}>
+              <button type="button" onClick={() => setPage("collections")} style={{ backgroundColor: "#C8A33A", color: "#2B1A12", borderRadius: "6px", padding: "12px 28px", fontWeight: 700, fontSize: "0.95rem", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px" }}>
                 View Collections <ChevronRight size={16} />
               </button>
-              <button onClick={() => navigate("contact")} style={{ border: "2px solid #D7C28A", color: "#F7F1E4", borderRadius: "6px", padding: "12px 28px", fontWeight: 600, fontSize: "0.95rem", backgroundColor: "transparent", cursor: "pointer" }}>
+              <button type="button" onClick={() => setPage("contact")} style={{ border: "2px solid #D7C28A", color: "#F7F1E4", borderRadius: "6px", padding: "12px 28px", fontWeight: 600, fontSize: "0.95rem", backgroundColor: "transparent", cursor: "pointer" }}>
                 Contact Us
               </button>
             </div>
@@ -34,6 +35,7 @@ export default function Home({ navigate }) {
         </div>
       </section>
 
+      {/* Collections Preview */}
       <section style={{ backgroundColor: "#F7F1E4" }} className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
@@ -43,7 +45,7 @@ export default function Home({ navigate }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat) => (
-              <button key={cat.name} onClick={() => navigate("collections")} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", width: "100%" }}>
+              <button key={cat.name} type="button" onClick={() => setPage("collections")} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", width: "100%" }}>
                 <div style={{ height: "140px", background: cat.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3rem" }}>{cat.icon}</div>
                 <div className="p-4 text-center">
                   <h3 style={{ color: "#2B1A12", fontSize: "0.9rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>{cat.name}</h3>
@@ -56,10 +58,16 @@ export default function Home({ navigate }) {
         </div>
       </section>
 
+      {/* Stats */}
       <section style={{ backgroundColor: "#2B1A12" }} className="py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[{ label: "Years of Trust", value: "40+" }, { label: "Happy Customers", value: "10,000+" }, { label: "Gold Items", value: "500+" }, { label: "Quality Guarantee", value: "BIS Hallmark" }].map((item) => (
+            {[
+              { label: "Years of Trust", value: "40+" },
+              { label: "Happy Customers", value: "10,000+" },
+              { label: "Gold Items", value: "500+" },
+              { label: "Quality Guarantee", value: "BIS Hallmark" },
+            ].map((item) => (
               <div key={item.label}>
                 <div style={{ color: "#C8A33A", fontSize: "1.6rem", fontWeight: "bold", marginBottom: "4px" }}>{item.value}</div>
                 <div style={{ color: "#A08060", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>{item.label}</div>

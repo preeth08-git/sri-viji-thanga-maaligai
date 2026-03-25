@@ -1,25 +1,25 @@
 import { useState } from "react";
-import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import Home from "./pages/Home";
 import Collections from "./pages/Collections";
 import Contact from "./pages/Contact";
-import Home from "./pages/Home";
 
 export default function App() {
   const [page, setPage] = useState("home");
 
-  const renderPage = () => {
+  function renderPage() {
     if (page === "collections") return <Collections />;
     if (page === "contact") return <Contact />;
-    return <Home navigate={setPage} />;
-  };
+    return <Home setPage={setPage} />;
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar page={page} navigate={setPage} />
-      <main className="flex-1">{renderPage()}</main>
-      <Footer navigate={setPage} />
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <Navbar page={page} setPage={setPage} />
+      <main style={{ flex: 1 }}>{renderPage()}</main>
+      <Footer setPage={setPage} />
       <WhatsAppButton />
     </div>
   );
