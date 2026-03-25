@@ -9,16 +9,19 @@ import Contact from "./pages/Contact";
 export default function App() {
   const [page, setPage] = useState("home");
 
-  const renderPage = () => {
+  // Helper to render the correct component based on state
+  function renderPage() {
     if (page === "collections") return <Collections setPage={setPage} />;
     if (page === "contact") return <Contact setPage={setPage} />;
     return <Home setPage={setPage} />;
-  };
+  }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#FAF6EE" }}>
       <Navbar page={page} setPage={setPage} />
-      <main style={{ flex: 1 }}>{renderPage()}</main>
+      <main style={{ flex: 1 }}>
+        {renderPage()}
+      </main>
       <Footer setPage={setPage} />
       <WhatsAppButton />
     </div>
