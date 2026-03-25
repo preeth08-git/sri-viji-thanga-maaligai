@@ -10,62 +10,68 @@ export default function Navbar({ page, setPage }) {
     { id: "contact", label: "Contact" },
   ];
 
+  const handleNav = (id) => {
+    setPage(id);
+    setMobileOpen(false);
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <header
-      style={{ backgroundColor: "#FAF6EE", borderBottom: "1px solid #D7C28A" }}
-      className="sticky top-0 z-50 shadow-sm"
-    >
+    <header style={{ backgroundColor: "#FAF6EE", borderBottom: "1px solid #D7C28A" }} className="sticky top-0 z-50 shadow-sm">
       <div style={{ backgroundColor: "#C8A33A" }} className="py-1 px-4 text-right">
         <span style={{ backgroundColor: "#2B1A12", color: "#F7F1E4", fontSize: "0.7rem", padding: "2px 12px", borderRadius: "999px" }}>
           Est. 1985 — Trusted Gold Jewellers
         </span>
       </div>
+      
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <button type="button" onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>
-            <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold", display: "block" }}>SRI VIJI</span>
-            <span style={{ color: "#6B5A4B", fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.2em", fontWeight: 600, display: "block" }}>Thanga Maaligai</span>
+          <button onClick={() => handleNav("home")} className="flex flex-col leading-none border-none bg-transparent cursor-pointer text-left">
+            <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold" }}>SRI VIJI</span>
+            <span style={{ color: "#6B5A4B", fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.2em", fontWeight: 600 }}>Thanga Maaligai</span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-3">
-            {links.map((link) => {
-              const isActive = page === link.id;
-              return (
-                <button
-                  key={link.id}
-                  type="button"
-                  onClick={() => setPage(link.id)}
-                  style={{ border: "1.5px solid #C8A33A", color: isActive ? "#FAF6EE" : "#2B1A12", backgroundColor: isActive ? "#C8A33A" : "transparent", borderRadius: "999px", padding: "6px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8">
+            {links.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => handleNav(link.id)}
+                style={{ 
+                  color: page === link.id ? "#C8A33A" : "#6B5A4B",
+                  fontWeight: page === link.id ? "600" : "400",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "0.9rem"
+                }}
+              >
+                {link.label}
+              </button>
+            ))}
           </nav>
 
-          <button type="button" className="md:hidden p-2 rounded-md" style={{ color: "#2B1A12", background: "none", border: "none", cursor: "pointer" }} onClick={() => setMobileOpen(!mobileOpen)}>
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          {/* Mobile Menu Toggle */}
+          <button className="md:hidden p-2 bg-transparent border-none" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X color="#C8A33A" /> : <Menu color="#C8A33A" />}
           </button>
         </div>
-
-        {mobileOpen && (
-          <nav className="md:hidden pb-4 flex flex-col gap-2" style={{ borderTop: "1px solid #D7C28A" }}>
-            {links.map((link) => {
-              const isActive = page === link.id;
-              return (
-                <button
-                  key={link.id}
-                  type="button"
-                  onClick={() => { setPage(link.id); setMobileOpen(false); }}
-                  style={{ border: "1.5px solid #C8A33A", color: isActive ? "#FAF6EE" : "#2B1A12", backgroundColor: isActive ? "#C8A33A" : "transparent", borderRadius: "999px", padding: "8px 20px", fontSize: "0.9rem", fontWeight: 600, cursor: "pointer", marginTop: "6px" }}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
-          </nav>
-        )}
       </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#FAF6EE] border-t border-[#D7C28A] p-4 flex flex-col gap-4">
+          {links.map((link) => (
+            <button 
+              key={link.id} 
+              onClick={() => handleNav(link.id)}
+              className="text-left py-2 bg-transparent border-none text-[#6B5A4B]"
+            >
+              {link.label}
+            </button>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
