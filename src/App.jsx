@@ -1,37 +1,49 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
+import {
+  Outlet,
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import WhatsAppButton from "./components/WhatsAppButton";
 import Collections from "./pages/Collections";
 import Contact from "./pages/Contact";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Home from "./pages/Home";
 
-function App() {
-  return (
-    <BrowserRouter>
+const rootRoute = createRootRoute({
+  component: () => (
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/collections" element={<Collections />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+      <main className="flex-1">
+        <Outlet />
       </main>
-
       <Footer />
+      <WhatsAppButton />
+    </div>
+  ),
+});
 
-      <a
-        href="https://wa.me/919840686575"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="whatsapp-btn"
-      >
-        WhatsApp
-      </a>
-    </BrowserRouter>
-  );
+const homeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: Home,
+});
+const collectionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/collections",
+  component: Collections,
+});
+const contactRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/contact",
+  component: Contact,
+});
+
+const routeTree = rootRoute.addChildren([homeRoute, collectionsRoute, contactRoute]);
+const router = createRouter({ routeTree });
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App;

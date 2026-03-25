@@ -1,19 +1,111 @@
-import { Link } from "react-router-dom";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
-function Navbar() {
+export default function Navbar() {
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const links = [
+    { to: "/", label: "Home" },
+    { to: "/collections", label: "Collections" },
+    { to: "/contact", label: "Contact" },
+  ];
+
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <h2 className="logo">Sri Viji Thanga Maaligai</h2>
-
-        <div className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/collections">Collections</Link>
-          <Link to="/about">About</Link>
-        </div>
+    <header
+      style={{ backgroundColor: "#FAF6EE", borderBottom: "1px solid #D7C28A" }}
+      className="sticky top-0 z-50 shadow-sm"
+    >
+      <div style={{ backgroundColor: "#C8A33A" }} className="py-1 px-4 text-right">
+        <span
+          style={{
+            backgroundColor: "#2B1A12",
+            color: "#F7F1E4",
+            fontSize: "0.7rem",
+            padding: "2px 12px",
+            borderRadius: "999px",
+          }}
+        >
+          Est. 1985 — Trusted Gold Jewellers
+        </span>
       </div>
-    </nav>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="flex flex-col leading-none">
+            <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold" }}>
+              SRI VIJI
+            </span>
+            <span style={{ color: "#6B5A4B", fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.2em", fontWeight: 600 }}>
+              Thanga Maaligai
+            </span>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-3">
+            {links.map((link) => {
+              const isActive = pathname === link.to;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  style={{
+                    border: "1.5px solid #C8A33A",
+                    color: isActive ? "#FAF6EE" : "#2B1A12",
+                    backgroundColor: isActive ? "#C8A33A" : "transparent",
+                    borderRadius: "999px",
+                    padding: "6px 20px",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <button
+            type="button"
+            className="md:hidden p-2 rounded-md"
+            style={{ color: "#2B1A12" }}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+
+        {mobileOpen && (
+          <nav className="md:hidden pb-4 flex flex-col gap-2" style={{ borderTop: "1px solid #D7C28A" }}>
+            {links.map((link) => {
+              const isActive = pathname === link.to;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    border: "1.5px solid #C8A33A",
+                    color: isActive ? "#FAF6EE" : "#2B1A12",
+                    backgroundColor: isActive ? "#C8A33A" : "transparent",
+                    borderRadius: "999px",
+                    padding: "8px 20px",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    textAlign: "center",
+                    marginTop: "6px",
+                    textDecoration: "none",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        )}
+      </div>
+    </header>
   );
 }
-
-export default Navbar;
