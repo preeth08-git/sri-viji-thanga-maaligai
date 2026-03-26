@@ -8,7 +8,7 @@ export default function Footer({ setPage }) {
           <div>
             <span style={{ color: "#C8A33A", fontSize: "1.5rem", fontWeight: "bold", display: "block" }}>SRI VIJI</span>
             <span style={{ color: "#D7C28A", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.2em" }}>Thanga Maaligai</span>
-            <p style={{ color: "#A08060", lineHeight: 1.7, fontSize: "0.875rem", marginTop: "8px" }}>Trusted gold jewellers since 1985. Quality you can rely on, prices that are fair.</p>
+            <p style={{ color: "#A08060", lineHeight: 1.7, fontSize: "0.875rem", marginTop: "8px" }}>Trusted gold jewellers since 1995. Quality you can rely on, prices that are fair.</p>
           </div>
           <div>
             <h3 style={{ color: "#C8A33A", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "16px" }}>Quick Links</h3>
@@ -25,15 +25,16 @@ export default function Footer({ setPage }) {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
               <li style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <MapPin size={14} style={{ color: "#C8A33A", marginTop: 3, flexShrink: 0 }} />
-                <span style={{ color: "#A08060", fontSize: "0.875rem" }}>12, Gandhi Road, Kumbakonam, Tamil Nadu – 612001</span>
+                <span style={{ color: "#A08060", fontSize: "0.875rem" }}>171/81 Eldams Road Teynampet Chennai, Tamil Nadu – 600018</span>
               </li>
               <li style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Phone size={14} style={{ color: "#C8A33A", flexShrink: 0 }} />
-                <a href="tel:+919876543210" style={{ color: "#D7C28A", fontSize: "0.875rem", textDecoration: "none" }}>+91 98765 43210</a>
+                <a href="tel:+919840686575" style={{ color: "#D7C28A", fontSize: "0.875rem", textDecoration: "none" }}>+91 98765 43210</a>
               </li>
               <li style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <Clock size={14} style={{ color: "#C8A33A", marginTop: 3, flexShrink: 0 }} />
-                <span style={{ color: "#A08060", fontSize: "0.875rem" }}>Mon–Sat: 9:30 AM – 8:00 PM<br />Sunday: 10:00 AM – 6:00 PM</span>
+                <span style={{ color: "#A08060", fontSize: "0.875rem" }}>Mon–Sun: 9:30 AM – 10:00 PM<br />
+                </span>
               </li>
             </ul>
           </div>

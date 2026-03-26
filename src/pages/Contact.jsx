@@ -15,7 +15,7 @@ export default function Contact() {
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ backgroundColor: "#2B1A12", borderRadius: "12px", padding: "24px" }}>
               <h2 style={{ color: "#C8A33A", fontSize: "1.4rem", fontWeight: "bold", marginBottom: "4px" }}>Sri Viji Thanga Maaligai</h2>
-              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Your trusted gold jewellery shop since 1985</p>
+              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Your trusted gold jewellery shop since 1995</p>
             </div>
 
             {[
@@ -28,7 +28,7 @@ export default function Contact() {
                   <div>
                     <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>{card.title}</h3>
                     {card.isPhone
-                      ? <a href="tel:+919876543210" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>{card.content}</a>
+                      ? <a href="tel:+919840686575" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>{card.content}</a>
                       : <p style={{ color: "#6B5A4B", fontSize: "0.875rem", lineHeight: 1.7, whiteSpace: "pre-line", margin: 0 }}>{card.content}</p>}
                   </div>
                 </div>

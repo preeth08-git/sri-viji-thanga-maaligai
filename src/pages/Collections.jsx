@@ -2,10 +2,54 @@ import { ArrowLeft, X } from "lucide-react";
 import { useState } from "react";
 
 const categories = [
-  { name: "Rings", icon: "💍", itemCount: 5, gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", items: [{ id: 1, name: "Lotus Flower Ring", weight: "4.8g", karat: "22K Gold", gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)" }, { id: 2, name: "Classic Band Ring", weight: "5.2g", karat: "22K Gold", gradient: "linear-gradient(135deg, #D4AA40 0%, #9A7520 100%)" }, { id: 3, name: "Temple Design Ring", weight: "6.1g", karat: "22K Gold", gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)" }, { id: 4, name: "Peacock Ring", weight: "7.4g", karat: "22K Gold", gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)" }, { id: 5, name: "Spiral Twist Ring", weight: "3.9g", karat: "18K Gold", gradient: "linear-gradient(135deg, #D2B04C 0%, #8B6914 100%)" }] },
-  { name: "Chains", icon: "⛓️", itemCount: 4, gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)", items: [{ id: 1, name: "Box Chain Necklace", weight: "12.5g", karat: "22K Gold", gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)" }, { id: 2, name: "Rope Chain", weight: "15.8g", karat: "22K Gold", gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)" }, { id: 3, name: "Flat Curb Chain", weight: "18.2g", karat: "22K Gold", gradient: "linear-gradient(135deg, #BF9A30 0%, #6B4F0A 100%)" }, { id: 4, name: "Singapore Chain", weight: "10.4g", karat: "18K Gold", gradient: "linear-gradient(135deg, #D4AA40 0%, #7A5C10 100%)" }] },
-  { name: "Bangles", icon: "✨", itemCount: 4, gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)", items: [{ id: 1, name: "Plain Gold Bangle", weight: "20.0g", karat: "22K Gold", gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)" }, { id: 2, name: "Patterned Bangle Set", weight: "45.0g", karat: "22K Gold", gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)" }, { id: 3, name: "Kada Bangle", weight: "32.5g", karat: "22K Gold", gradient: "linear-gradient(135deg, #D2B04C 0%, #6B4F0A 100%)" }, { id: 4, name: "Twisted Bangle", weight: "22.8g", karat: "18K Gold", gradient: "linear-gradient(135deg, #D4AA40 0%, #9A7520 100%)" }] },
-  { name: "Necklaces", icon: "📿", itemCount: 4, gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)", items: [{ id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)" }, { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", gradient: "linear-gradient(135deg, #D2B04C 0%, #8B6914 100%)" }, { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)" }, { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", gradient: "linear-gradient(135deg, #D4AA40 0%, #9A7520 100%)" }] },
+  {
+    name: "Rings",
+    icon: "💍",
+    itemCount: 4,
+    gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)",
+    items: [
+      { id: 1, name: "Diamond Solitaire Ring", weight: "4.8g", karat: "22K Gold", image: "/rings/ring1.png" },
+      { id: 2, name: "Emerald Cut Ring", weight: "5.2g", karat: "22K Gold", image: "/rings/ring2.png" },
+      { id: 3, name: "Twisted Diamond Ring", weight: "6.1g", karat: "22K Gold", image: "/rings/ring3.png" },
+      { id: 4, name: "Double Heart Ring", weight: "3.9g", karat: "22K Gold", image: "/rings/ring4.png" },
+    ],
+  },
+  {
+    name: "Chains",
+    icon: "⛓️",
+    itemCount: 4,
+    gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)",
+    items: [
+      { id: 1, name: "Box Chain Necklace", weight: "12.5g", karat: "22K Gold", image: null },
+      { id: 2, name: "Rope Chain", weight: "15.8g", karat: "22K Gold", image: null },
+      { id: 3, name: "Flat Curb Chain", weight: "18.2g", karat: "22K Gold", image: null },
+      { id: 4, name: "Singapore Chain", weight: "10.4g", karat: "18K Gold", image: null },
+    ],
+  },
+  {
+    name: "Bangles",
+    icon: "✨",
+    itemCount: 4,
+    gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)",
+    items: [
+      { id: 1, name: "Plain Gold Bangle", weight: "20.0g", karat: "22K Gold", image: null },
+      { id: 2, name: "Patterned Bangle Set", weight: "45.0g", karat: "22K Gold", image: null },
+      { id: 3, name: "Kada Bangle", weight: "32.5g", karat: "22K Gold", image: null },
+      { id: 4, name: "Twisted Bangle", weight: "22.8g", karat: "18K Gold", image: null },
+    ],
+  },
+  {
+    name: "Necklaces",
+    icon: "📿",
+    itemCount: 4,
+    gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)",
+    items: [
+      { id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", image: null },
+      { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", image: null },
+      { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", image: null },
+      { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", image: null },
+    ],
+  },
 ];
 
 export default function Collections() {
@@ -49,14 +93,20 @@ export default function Collections() {
         )}
 
         {view === "items" && selectedCategory && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "16px" }}>
             {selectedCategory.items.map((item) => (
               <button key={item.id} type="button" onClick={() => setSelectedItem(item)}
                 style={{ border: "1.5px solid #D7C28A", borderRadius: "10px", backgroundColor: "#FAF6EE", overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
-                <div style={{ height: "110px", background: item.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2rem" }}>{selectedCategory.icon}</div>
+                {item.image ? (
+                  <div style={{ height: "140px", backgroundColor: "#F0E8D4", overflow: "hidden" }}>
+                    <img src={item.image} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                ) : (
+                  <div style={{ height: "140px", background: selectedCategory.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2.5rem" }}>{selectedCategory.icon}</div>
+                )}
                 <div style={{ padding: "12px", textAlign: "center" }}>
                   <h4 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: 600, marginBottom: "4px" }}>{item.name}</h4>
-                  <p style={{ color: "#6B5A4B", fontSize: "0.75rem" }}>{item.karat} · {item.weight}</p>
+                  <p style={{ color: "#6B5A4B", fontSize: "0.72rem" }}>{item.karat} · {item.weight}</p>
                 </div>
               </button>
             ))}
@@ -72,7 +122,13 @@ export default function Collections() {
               style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.7)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}>
               <X size={16} />
             </button>
-            <div style={{ height: "220px", background: selectedItem.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4.5rem" }}>{selectedCategory?.icon}</div>
+            {selectedItem.image ? (
+              <div style={{ height: "240px", backgroundColor: "#F0E8D4", overflow: "hidden" }}>
+                <img src={selectedItem.image} alt={selectedItem.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+            ) : (
+              <div style={{ height: "220px", background: selectedCategory?.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4.5rem" }}>{selectedCategory?.icon}</div>
+            )}
             <div style={{ padding: "24px" }}>
               <h3 style={{ color: "#2B1A12", fontSize: "1.3rem", fontWeight: "bold", marginBottom: "4px" }}>{selectedItem.name}</h3>
               <div style={{ width: 40, height: 2, backgroundColor: "#C8A33A", borderRadius: 1, marginBottom: "16px" }} />
@@ -84,7 +140,7 @@ export default function Collections() {
                   </div>
                 ))}
               </div>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/919840686575" target="_blank" rel="noopener noreferrer"
                 style={{ display: "block", marginTop: "20px", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px", textAlign: "center", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}>
                 Enquire on WhatsApp
               </a>
