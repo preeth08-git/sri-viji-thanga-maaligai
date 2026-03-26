@@ -67,7 +67,7 @@ export default function Contact() {
               <MessageCircle size={32} color="#25D366" style={{ margin: "0 auto 12px" }} />
               <h3 style={{ color: "#F7F1E4", fontSize: "1.1rem", fontWeight: "bold", marginBottom: "8px" }}>Chat With Us</h3>
               <p style={{ color: "#A08060", fontSize: "0.875rem", marginBottom: "16px" }}>Ask about any item, price, or custom order on WhatsApp.</p>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/919840686575" target="_blank" rel="noopener noreferrer"
                 style={{ display: "inline-block", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px 28px", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}>
                 WhatsApp Us
               </a>
