@@ -19,8 +19,8 @@ export default function Contact() {
             </div>
 
             {[
-              { icon: <MapPin size={18} color="#2B1A12" />, title: "Our Address", content: "12, Gandhi Road,\nNear Mahamaham Tank,\nKumbakonam, Tamil Nadu – 612001", isPhone: false },
-              { icon: <Phone size={18} color="#2B1A12" />, title: "Phone", content: "+91 98765 43210", isPhone: true },
+              { icon: <MapPin size={18} color="#2B1A12" />, title: "Our Address", content: "171/81 Eldams Road Teynampet, Chennai, Tamil Nadu – 60018", isPhone: false },
+              { icon: <Phone size={18} color="#2B1A12" />, title: "Phone", content: "+91 9840686575", isPhone: true },
             ].map((card) => (
               <div key={card.title} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
@@ -55,8 +55,8 @@ export default function Contact() {
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", overflow: "hidden", height: "280px", background: "linear-gradient(135deg, #2B1A12 0%, #3A241A 50%, #6B4A1A 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px" }}>
               <MapPin size={40} color="#C8A33A" />
-              <p style={{ color: "#F7F1E4", fontSize: "1.125rem", fontWeight: 600 }}>Kumbakonam, Tamil Nadu</p>
-              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Near Mahamaham Tank</p>
+              <p style={{ color: "#F7F1E4", fontSize: "1.125rem", fontWeight: 600 }}>Chennai, Tamil Nadu</p>
+              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Teynampet(Royal snacks)</p>
               <a href="https://maps.google.com/?q=Kumbakonam,+Tamil+Nadu" target="_blank" rel="noopener noreferrer"
                 style={{ border: "1.5px solid #C8A33A", color: "#C8A33A", borderRadius: "999px", padding: "6px 20px", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none", marginTop: "8px" }}>
                 Open in Maps
