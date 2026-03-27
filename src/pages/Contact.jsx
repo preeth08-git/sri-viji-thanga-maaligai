@@ -40,7 +40,7 @@ export default function Contact() {
                 <div style={{ width: 40, height: 40, borderRadius: "8px", backgroundColor: "#C8A33A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Clock size={18} color="#2B1A12" /></div>
                 <div style={{ flex: 1 }}>
                   <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "8px" }}>Working Hours</h3>
-                  {["Monday – Sunday"].map(([day, hours]) => (
+                  {["Monday – Sunday", "9:30 AM – 10:00 PM"].map(([day, hours]) => (
                     <div key={day} style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
                       <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>{day}</span>
                       <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>{hours}</span>
