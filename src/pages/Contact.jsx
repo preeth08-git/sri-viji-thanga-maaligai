@@ -46,10 +46,6 @@ export default function Contact() {
                     <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Monday – Saturday</span>
                     <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>9:30 AM – 10:00 PM</span>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
-                    <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Sunday</span>
-                    <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>10:00 AM – 6:00 PM</span>
-                  </div>
                 </div>
               </div>
             </div>
