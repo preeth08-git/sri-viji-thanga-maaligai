@@ -1,133 +1,170 @@
 import { ArrowLeft, X, RotateCcw } from "lucide-react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
+import * as THREE from "three";
 
-function Ring3DViewer({ image, name }) {
-  const [rotX, setRotX] = useState(-10);
-  const [rotY, setRotY] = useState(15);
-  const isDragging = useRef(false);
-  const lastPos = useRef({ x: 0, y: 0 });
+function Ring3DViewer({ image }) {
+  const mountRef = useRef(null);
+  const stateRef = useRef({});
 
-  const onMouseDown = useCallback((e) => {
-    isDragging.current = true;
-    lastPos.current = { x: e.clientX, y: e.clientY };
-    e.preventDefault();
-  }, []);
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+    const width = mount.clientWidth || 380;
+    const height = 280;
 
-  const onMouseMove = useCallback((e) => {
-    if (!isDragging.current) return;
-    const dx = e.clientX - lastPos.current.x;
-    const dy = e.clientY - lastPos.current.y;
-    setRotY((prev) => prev + dx * 0.5);
-    setRotX((prev) => Math.max(-60, Math.min(60, prev - dy * 0.5)));
-    lastPos.current = { x: e.clientX, y: e.clientY };
-  }, []);
+    // Scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#110a04");
 
-  const onMouseUp = useCallback(() => { isDragging.current = false; }, []);
+    // Camera
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    camera.position.set(0, 0, 4);
 
-  const onTouchStart = useCallback((e) => {
-    isDragging.current = true;
-    lastPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  }, []);
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    mount.appendChild(renderer.domElement);
 
-  const onTouchMove = useCallback((e) => {
-    if (!isDragging.current) return;
-    const dx = e.touches[0].clientX - lastPos.current.x;
-    const dy = e.touches[0].clientY - lastPos.current.y;
-    setRotY((prev) => prev + dx * 0.5);
-    setRotX((prev) => Math.max(-60, Math.min(60, prev - dy * 0.5)));
-    lastPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  }, []);
+    // Lighting — warm gold studio look
+    scene.add(new THREE.AmbientLight(0xfff0cc, 0.5));
 
-  const reset = () => { setRotX(-10); setRotY(15); };
+    const keyLight = new THREE.DirectionalLight(0xffd97a, 2.5);
+    keyLight.position.set(4, 6, 5);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.PointLight(0xC8A33A, 1.2, 20);
+    fillLight.position.set(-4, 2, 3);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffe0a0, 0.8);
+    rimLight.position.set(-3, -2, -4);
+    scene.add(rimLight);
+
+    // Ring geometry — torus shape
+    const ringGeo = new THREE.TorusGeometry(1, 0.28, 64, 128);
+    const ringMat = new THREE.MeshStandardMaterial({
+      color: 0xC8A33A,
+      metalness: 0.95,
+      roughness: 0.08,
+      envMapIntensity: 1.0,
+    });
+
+    // Load ring image as texture on the band surface
+    const loader = new THREE.TextureLoader();
+    loader.load(image, (tex) => {
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(4, 1);
+      ringMat.map = tex;
+      ringMat.metalness = 0.7;
+      ringMat.roughness = 0.2;
+      ringMat.needsUpdate = true;
+    });
+
+    // Stone on top of ring
+    const stoneGeo = new THREE.OctahedronGeometry(0.22, 2);
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      metalness: 0.0,
+      roughness: 0.0,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const stone = new THREE.Mesh(stoneGeo, stoneMat);
+    stone.position.set(0, 1.02, 0);
+    stone.rotation.x = Math.PI / 6;
+    stone.scale.set(1, 0.65, 1);
+
+    // Stone prongs (4 small cylinders)
+    const prongMat = new THREE.MeshStandardMaterial({ color: 0xC8A33A, metalness: 0.95, roughness: 0.1 });
+    const prongs = [];
+    for (let i = 0; i < 4; i++) {
+      const pg = new THREE.CylinderGeometry(0.03, 0.03, 0.22, 8);
+      const pm = new THREE.Mesh(pg, prongMat);
+      const angle = (i / 4) * Math.PI * 2;
+      pm.position.set(Math.cos(angle) * 0.18, 0.95, Math.sin(angle) * 0.18);
+      prongs.push(pm);
+    }
+
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+
+    const group = new THREE.Group();
+    group.add(ring);
+    group.add(stone);
+    prongs.forEach((p) => group.add(p));
+    group.rotation.x = -0.2;
+    scene.add(group);
+
+    // Drag interaction
+    let isDragging = false;
+    let prev = { x: 0, y: 0 };
+    stateRef.current.group = group;
+
+    const onDown = (x, y) => { isDragging = true; prev = { x, y }; };
+    const onMove = (x, y) => {
+      if (!isDragging) return;
+      group.rotation.y += (x - prev.x) * 0.012;
+      group.rotation.x += (y - prev.y) * 0.012;
+      group.rotation.x = Math.max(-1.2, Math.min(1.2, group.rotation.x));
+      prev = { x, y };
+    };
+    const onUp = () => { isDragging = false; };
+
+    const canvas = renderer.domElement;
+    canvas.addEventListener("mousedown", (e) => onDown(e.clientX, e.clientY));
+    window.addEventListener("mousemove", (e) => onMove(e.clientX, e.clientY));
+    window.addEventListener("mouseup", onUp);
+    canvas.addEventListener("touchstart", (e) => { e.preventDefault(); onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+    window.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX, e.touches[0].clientY));
+    window.addEventListener("touchend", onUp);
+
+    // Auto-spin when idle
+    let animId;
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      if (!isDragging) group.rotation.y += 0.006;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    stateRef.current.reset = () => {
+      group.rotation.set(-0.2, 0, 0);
+    };
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("mousemove", (e) => onMove(e.clientX, e.clientY));
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchmove", (e) => onMove(e.touches[0].clientX, e.touches[0].clientY));
+      window.removeEventListener("touchend", onUp);
+      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
+      renderer.dispose();
+      ringGeo.dispose();
+      ringMat.dispose();
+      stoneGeo.dispose();
+      stoneMat.dispose();
+      prongMat.dispose();
+    };
+  }, [image]);
 
   return (
-    <div style={{ userSelect: "none" }}>
+    <div>
       <div
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onMouseUp}
-        style={{
-          width: "100%",
-          height: "260px",
-          backgroundColor: "#1a0f08",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: isDragging.current ? "grabbing" : "grab",
-          perspective: "800px",
-          overflow: "hidden",
-          position: "relative",
-        }}
-      >
-        {/* Spotlight glow */}
-        <div style={{
-          position: "absolute",
-          width: "200px",
-          height: "200px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(200,163,58,0.18) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{
-          transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)`,
-          transformStyle: "preserve-3d",
-          transition: isDragging.current ? "none" : "transform 0.1s ease",
-          filter: "drop-shadow(0 8px 24px rgba(200,163,58,0.45))",
-        }}>
-          <img
-            src={image}
-            alt={name}
-            draggable={false}
-            style={{
-              width: "180px",
-              height: "180px",
-              objectFit: "contain",
-              display: "block",
-            }}
-          />
-        </div>
-
-        {/* Hint label */}
-        <div style={{
-          position: "absolute",
-          bottom: "10px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          color: "rgba(215,194,138,0.6)",
-          fontSize: "0.7rem",
-          letterSpacing: "0.05em",
-          pointerEvents: "none",
-          whiteSpace: "nowrap",
-        }}>
-          Drag to rotate
-        </div>
-      </div>
-
-      {/* Reset button */}
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
+        ref={mountRef}
+        style={{ width: "100%", cursor: "grab", touchAction: "none" }}
+      />
+      <div style={{ textAlign: "center", padding: "8px 0 4px" }}>
         <button
           type="button"
-          onClick={reset}
-          style={{
-            background: "none",
-            border: "1px solid #C8A33A",
-            color: "#C8A33A",
-            borderRadius: "999px",
-            padding: "4px 14px",
-            fontSize: "0.75rem",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "4px",
-          }}
+          onClick={() => stateRef.current.reset?.()}
+          style={{ background: "none", border: "1px solid #C8A33A", color: "#C8A33A", borderRadius: "999px", padding: "4px 14px", fontSize: "0.72rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "4px" }}
         >
-          <RotateCcw size={12} /> Reset
+          <RotateCcw size={11} /> Reset
         </button>
+        <p style={{ color: "rgba(215,194,138,0.55)", fontSize: "0.68rem", marginTop: "4px" }}>Drag to rotate · Auto-spins when idle</p>
       </div>
     </div>
   );
@@ -261,30 +298,14 @@ export default function Collections() {
         )}
       </div>
 
-      {/* Modal with 3D viewer */}
       {selectedItem && (
         <>
-          <div
-            onClick={() => setSelectedItem(null)}
-            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(43,26,18,0.85)", zIndex: 100 }}
-          />
-          <div style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "#FAF6EE",
-            border: "1.5px solid #D7C28A",
-            borderRadius: "14px",
-            overflow: "hidden",
-            zIndex: 101,
-            width: "min(420px, 94vw)",
-            boxShadow: "0 20px 60px rgba(43,26,18,0.5)",
-          }}>
+          <div onClick={() => setSelectedItem(null)} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(43,26,18,0.88)", zIndex: 100 }} />
+          <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#FAF6EE", border: "1.5px solid #D7C28A", borderRadius: "14px", overflow: "hidden", zIndex: 101, width: "min(420px, 94vw)", boxShadow: "0 20px 60px rgba(43,26,18,0.6)" }}>
             <button
               type="button"
               onClick={() => setSelectedItem(null)}
-              style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.7)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}
+              style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.75)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}
             >
               <X size={16} />
             </button>
@@ -297,27 +318,19 @@ export default function Collections() {
               </div>
             )}
 
-            <div style={{ padding: "20px 24px 24px" }}>
-              <h3 style={{ color: "#2B1A12", fontSize: "1.2rem", fontWeight: "bold", marginBottom: "4px" }}>{selectedItem.name}</h3>
-              <div style={{ width: 40, height: 2, backgroundColor: "#C8A33A", borderRadius: 1, marginBottom: "16px" }} />
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {[
-                  { label: "Karat", value: selectedItem.karat },
-                  { label: "Weight", value: selectedItem.weight },
-                  { label: "Quality", value: "BIS Hallmark" },
-                ].map((row) => (
+            <div style={{ padding: "16px 24px 24px" }}>
+              <h3 style={{ color: "#2B1A12", fontSize: "1.15rem", fontWeight: "bold", marginBottom: "4px" }}>{selectedItem.name}</h3>
+              <div style={{ width: 40, height: 2, backgroundColor: "#C8A33A", borderRadius: 1, marginBottom: "14px" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {[{ label: "Karat", value: selectedItem.karat }, { label: "Weight", value: selectedItem.weight }, { label: "Quality", value: "BIS Hallmark" }].map((row) => (
                   <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", borderRadius: "6px", backgroundColor: "#F0E8D4" }}>
                     <span style={{ color: "#6B5A4B", fontSize: "0.875rem", fontWeight: 500 }}>{row.label}</span>
                     <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: "bold" }}>{row.value}</span>
                   </div>
                 ))}
               </div>
-              <a
-                href="https://wa.me/919840686575"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "block", marginTop: "18px", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px", textAlign: "center", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}
-              >
+              <a href="https://wa.me/919840686575" target="_blank" rel="noopener noreferrer"
+                style={{ display: "block", marginTop: "16px", backgroundColor: "#25D366", color: "#FFFFFF", borderRadius: "8px", padding: "12px", textAlign: "center", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none" }}>
                 Enquire on WhatsApp
               </a>
             </div>
