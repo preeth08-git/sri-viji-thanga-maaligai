@@ -11,53 +11,56 @@ export default function Contact() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "32px", alignItems: "start" }}>
-          {/* Left column */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ backgroundColor: "#2B1A12", borderRadius: "12px", padding: "24px" }}>
               <h2 style={{ color: "#C8A33A", fontSize: "1.4rem", fontWeight: "bold", marginBottom: "4px" }}>Sri Viji Thanga Maaligai</h2>
               <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Your trusted gold jewellery shop since 1995</p>
             </div>
 
-            {[
-              { icon: <MapPin size={18} color="#2B1A12" />, title: "Our Address", content: "171/81 Eldams Road Teynampet, Chennai, Tamil Nadu – 600018", isPhone: false },
-              { icon: <Phone size={18} color="#2B1A12" />, title: "Phone", content: "+91 9840686575", isPhone: true },
-            ].map((card) => (
-              <div key={card.title} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: "8px", backgroundColor: "#C8A33A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{card.icon}</div>
-                  <div>
-                    <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>{card.title}</h3>
-                    {card.isPhone
-                      ? <a href="tel:+91 9840686575" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>{card.content}</a>
-                      : <p style={{ color: "#6B5A4B", fontSize: "0.875rem", lineHeight: 1.7, whiteSpace: "pre-line", margin: 0 }}>{card.content}</p>}
-                  </div>
+            <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "8px", backgroundColor: "#C8A33A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><MapPin size={18} color="#2B1A12" /></div>
+                <div>
+                  <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>Our Address</h3>
+                  <p style={{ color: "#6B5A4B", fontSize: "0.875rem", lineHeight: 1.7, margin: 0 }}>171/81 Eldams Road,<br />Teynampet,<br />Chennai - 600018</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "8px", backgroundColor: "#C8A33A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Phone size={18} color="#2B1A12" /></div>
+                <div>
+                  <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>Phone</h3>
+                  <a href="tel:+919840686575" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>+91 9840686575</a>
+                </div>
+              </div>
+            </div>
 
             <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                 <div style={{ width: 40, height: 40, borderRadius: "8px", backgroundColor: "#C8A33A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Clock size={18} color="#2B1A12" /></div>
                 <div style={{ flex: 1 }}>
-                  <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "8px" }}>Working Hours</h3>
-                  {["Monday – Sunday", "9:30 AM – 10:00 PM"].map(([day, hours]) => (
-                    <div key={day} style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
-                      <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>{day}</span>
-                      <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>{hours}</span>
-                    </div>
-                  ))}
+                  <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "12px" }}>Working Hours</h3>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", marginBottom: "8px" }}>
+                    <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Monday – Saturday</span>
+                    <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>9:30 AM – 10:00 PM</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
+                    <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Sunday</span>
+                    <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>10:00 AM – 6:00 PM</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right column */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", overflow: "hidden", height: "280px", background: "linear-gradient(135deg, #2B1A12 0%, #3A241A 50%, #6B4A1A 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px" }}>
               <MapPin size={40} color="#C8A33A" />
-              <p style={{ color: "#F7F1E4", fontSize: "1.125rem", fontWeight: 600 }}>Chennai, Tamil Nadu</p>
-              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>Teynampet(Royal snacks)</p>
-              <a href="https://maps.google.com/?q=Kumbakonam,+Tamil+Nadu" target="_blank" rel="noopener noreferrer"
+              <p style={{ color: "#F7F1E4", fontSize: "1.125rem", fontWeight: 600 }}>Teynampet, Chennai</p>
+              <p style={{ color: "#A08060", fontSize: "0.875rem" }}>171/81 Eldams Road</p>
+              <a href="https://maps.google.com/?q=171+Eldams+Road+Teynampet+Chennai" target="_blank" rel="noopener noreferrer"
                 style={{ border: "1.5px solid #C8A33A", color: "#C8A33A", borderRadius: "999px", padding: "6px 20px", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none", marginTop: "8px" }}>
                 Open in Maps
               </a>
@@ -75,7 +78,7 @@ export default function Contact() {
 
             <div style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "16px 20px", backgroundColor: "#FAF6EE" }}>
               <p style={{ color: "#6B5A4B", fontSize: "0.875rem", textAlign: "center", lineHeight: 1.7 }}>
-                💛 We also do <strong style={{ color: "#2B1A12" }}>custom orders</strong> for weddings and special occasions.
+                We also do <strong style={{ color: "#2B1A12" }}>custom orders</strong> for weddings and special occasions.
               </p>
             </div>
           </div>
