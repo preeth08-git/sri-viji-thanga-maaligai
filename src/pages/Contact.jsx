@@ -19,7 +19,7 @@ export default function Contact() {
             </div>
 
             {[
-              { icon: <MapPin size={18} color="#2B1A12" />, title: "Our Address", content: "171/81 Eldams Road Teynampet, Chennai, Tamil Nadu – 60018", isPhone: false },
+              { icon: <MapPin size={18} color="#2B1A12" />, title: "Our Address", content: "171/81 Eldams Road Teynampet, Chennai, Tamil Nadu – 600018", isPhone: false },
               { icon: <Phone size={18} color="#2B1A12" />, title: "Phone", content: "+91 9840686575", isPhone: true },
             ].map((card) => (
               <div key={card.title} style={{ border: "1.5px solid #D7C28A", borderRadius: "12px", padding: "20px", backgroundColor: "#FAF6EE" }}>
@@ -28,7 +28,7 @@ export default function Contact() {
                   <div>
                     <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>{card.title}</h3>
                     {card.isPhone
-                      ? <a href="tel:+919840686575" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>{card.content}</a>
+                      ? <a href="tel:+91 9840686575" style={{ color: "#6B5A4B", fontSize: "0.875rem", textDecoration: "none" }}>{card.content}</a>
                       : <p style={{ color: "#6B5A4B", fontSize: "0.875rem", lineHeight: 1.7, whiteSpace: "pre-line", margin: 0 }}>{card.content}</p>}
                   </div>
                 </div>
