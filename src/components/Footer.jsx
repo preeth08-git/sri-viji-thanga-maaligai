@@ -29,7 +29,7 @@ export default function Footer({ setPage }) {
               </li>
               <li style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Phone size={14} style={{ color: "#C8A33A", flexShrink: 0 }} />
-                <a href="tel:+919840686575" style={{ color: "#D7C28A", fontSize: "0.875rem", textDecoration: "none" }}>+91 98765 43210</a>
+                <a href="tel:+919840686575" style={{ color: "#D7C28A", fontSize: "0.875rem", textDecoration: "none" }}>+91 9840686575</a>
               </li>
               <li style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <Clock size={14} style={{ color: "#C8A33A", marginTop: 3, flexShrink: 0 }} />
