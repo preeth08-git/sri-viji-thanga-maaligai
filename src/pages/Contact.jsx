@@ -56,7 +56,7 @@ export default function Contact() {
               <MapPin size={40} color="#C8A33A" />
               <p style={{ color: "#F7F1E4", fontSize: "1.125rem", fontWeight: 600 }}>Teynampet, Chennai</p>
               <p style={{ color: "#A08060", fontSize: "0.875rem" }}>171/81 Eldams Road</p>
-              <a href="https://maps.google.com/?q=171+Eldams+Road+Teynampet+Chennai" target="_blank" rel="noopener noreferrer"
+              <a href="https://maps.app.goo.gl/hFzTqroPZuwwSdCh8" target="_blank" rel="noopener noreferrer"
                 style={{ border: "1.5px solid #C8A33A", color: "#C8A33A", borderRadius: "999px", padding: "6px 20px", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none", marginTop: "8px" }}>
                 Open in Maps
               </a>
