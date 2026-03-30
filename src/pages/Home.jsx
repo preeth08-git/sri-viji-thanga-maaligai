@@ -47,7 +47,7 @@ export default function Home({ onNavigate }) {
               </div>
               <div style={{ padding: "18px 20px", backgroundColor: "#FDF8EC", borderTop: "2px solid #C8A33A" }}>
                 <h3 style={{ color: "#2B1A12", fontSize: "1rem", fontWeight: "bold", marginBottom: "4px" }}>Gold Jewellery</h3>
-                <p style={{ color: "#6B5A4B", fontSize: "0.8rem", marginBottom: "8px" }}>22K & 18K BIS Hallmark Gold</p>
+                <p style={{ color: "#6B5A4B", fontSize: "0.8rem", marginBottom: "8px" }}>22K With Hallmark Gold</p>
                 <p style={{ color: "#8B7355", fontSize: "0.75rem", marginBottom: "14px" }}>Rings · Chains · Bangles · Necklaces</p>
                 <span style={{ backgroundColor: "#C8A33A", color: "#2B1A12", borderRadius: "999px", padding: "7px 24px", fontSize: "0.84rem", fontWeight: 700, display: "inline-block" }}>Explore Gold →</span>
               </div>
