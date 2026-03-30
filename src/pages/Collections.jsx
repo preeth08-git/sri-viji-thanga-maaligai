@@ -314,7 +314,9 @@ export default function Collections() {
             {/* Gold Box */}
             <button type="button" onClick={() => { setSelectedMetal("gold"); setView("categories"); }}
               style={{ border: "none", borderRadius: "16px", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", boxShadow: "0 8px 32px rgba(200,163,58,0.25)" }}>
-
+              <div style={{ height: "200px", background: data.gold.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                <span style={{ color: "#fff8e7", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "0.08em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>GOLD</span>
+              </div>
               <div style={{ padding: "18px 20px", backgroundColor: "#FDF8EC", borderTop: "2px solid #C8A33A" }}>
                 <h3 style={{ color: "#2B1A12", fontSize: "1rem", fontWeight: "bold", marginBottom: "4px" }}>Gold Jewellery</h3>
                 <p style={{ color: "#6B5A4B", fontSize: "0.8rem", marginBottom: "14px" }}>{data.gold.tagline}</p>
@@ -325,7 +327,9 @@ export default function Collections() {
             {/* Silver Box */}
             <button type="button" onClick={() => { setSelectedMetal("silver"); setView("categories"); }}
               style={{ border: "none", borderRadius: "16px", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", boxShadow: "0 8px 32px rgba(100,140,170,0.2)" }}>
-              
+              <div style={{ height: "200px", background: data.silver.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                <span style={{ color: "#f0f6ff", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "0.08em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>SILVER</span>
+              </div>
               <div style={{ padding: "18px 20px", backgroundColor: "#F0F5FA", borderTop: "2px solid #8A9BB0" }}>
                 <h3 style={{ color: "#1A2B3C", fontSize: "1rem", fontWeight: "bold", marginBottom: "4px" }}>Silver Jewellery</h3>
                 <p style={{ color: "#4A6070", fontSize: "0.8rem", marginBottom: "14px" }}>{data.silver.tagline}</p>
