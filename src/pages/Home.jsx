@@ -59,7 +59,7 @@ export default function Home({ setPage }) {
       <section style={{ backgroundColor: "#2B1A12", padding: "40px 0" }}>
         <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "24px", textAlign: "center" }}>
-            {[{ label: "Years of Trust", value: "40+" }, { label: "Happy Customers", value: "10,000+" }, { label: "Gold Items", value: "500+" }, { label: "Quality Guarantee", value: "BIS Hallmark" }].map((item) => (
+            {[{ label: "Years of Trust", value: "30+" }, { label: "Happy Customers", value: "10,000+" }, { label: "Gold Items & Silver Items", value: "500+" }, { label: "Quality Guarantee", value: "916 Hall Mark" }].map((item) => (
               <div key={item.label}>
                 <div style={{ color: "#C8A33A", fontSize: "1.6rem", fontWeight: "bold", marginBottom: "4px" }}>{item.value}</div>
                 <div style={{ color: "#A08060", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>{item.label}</div>
