@@ -74,10 +74,10 @@ export default function Home({ onNavigate }) {
       <div style={{ backgroundColor: "#2B1A12", padding: "48px 24px" }}>
         <div style={{ maxWidth: "1152px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "32px", textAlign: "center" }}>
           {[
-            { number: "40+", label: "YEARS OF TRUST" },
+            { number: "30+", label: "YEARS OF TRUST" },
             { number: "10,000+", label: "HAPPY CUSTOMERS" },
             { number: "500+", label: "GOLD ITEMS" },
-            { number: "BIS Hallmark", label: "QUALITY GUARANTEE" },
+            { number: "916 Hallmark", label: "QUALITY GUARANTEE" },
           ].map((stat) => (
             <div key={stat.label}>
               <p style={{ color: "#C8A33A", fontSize: "clamp(1.4rem, 3vw, 2rem)", fontWeight: 800, marginBottom: "6px" }}>{stat.number}</p>
