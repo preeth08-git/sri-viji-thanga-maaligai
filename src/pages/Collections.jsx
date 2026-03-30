@@ -4,7 +4,6 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-// ─── 3D Viewer ───────────────────────────────────────────────────────────────
 function Ring3DViewer({ modelUrl }) {
   const mountRef = useRef(null);
   const ctrlRef = useRef(null);
@@ -17,7 +16,6 @@ function Ring3DViewer({ modelUrl }) {
     if (!mount) return;
     const W = mount.clientWidth || 420;
     const H = 320;
-
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -26,19 +24,15 @@ function Ring3DViewer({ modelUrl }) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.6;
     mount.appendChild(renderer.domElement);
-
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#0d0700");
-
     const camera = new THREE.PerspectiveCamera(40, W / H, 0.01, 100);
     camera.position.set(0, 0.5, 4);
     cameraRef.current = camera;
-
     const keyLight = new THREE.DirectionalLight(0xffd580, 4.0);
     keyLight.position.set(3, 5, 4);
     keyLight.castShadow = true;
     scene.add(keyLight);
-    scene.add(new THREE.DirectionalLight(0xaaddff, 1.2).position.set(-4, 1, 2) && new THREE.DirectionalLight(0xaaddff, 1.2));
     const fillLight = new THREE.DirectionalLight(0xaaddff, 1.2);
     fillLight.position.set(-4, 1, 2);
     scene.add(fillLight);
@@ -46,7 +40,6 @@ function Ring3DViewer({ modelUrl }) {
     rimLight.position.set(0, -2, -5);
     scene.add(rimLight);
     scene.add(new THREE.AmbientLight(0xfff0cc, 0.4));
-
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
@@ -57,7 +50,6 @@ function Ring3DViewer({ modelUrl }) {
     controls.autoRotate = true;
     controls.autoRotateSpeed = 1.5;
     ctrlRef.current = controls;
-
     let idleTimer = null;
     const stopAutoRotate = () => {
       controls.autoRotate = false;
@@ -66,7 +58,6 @@ function Ring3DViewer({ modelUrl }) {
     };
     renderer.domElement.addEventListener("pointerdown", stopAutoRotate);
     renderer.domElement.addEventListener("wheel", stopAutoRotate);
-
     const loader = new GLTFLoader();
     let modelGroup = null;
     loader.load(modelUrl, (gltf) => {
@@ -92,7 +83,6 @@ function Ring3DViewer({ modelUrl }) {
       setStatus("ready");
     }, (xhr) => { if (xhr.total > 0) setProgress(Math.round((xhr.loaded / xhr.total) * 100)); },
     () => setStatus("error"));
-
     let animId, t = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
@@ -102,10 +92,8 @@ function Ring3DViewer({ modelUrl }) {
       renderer.render(scene, camera);
     };
     animate();
-
     const onResize = () => { const w = mount.clientWidth; renderer.setSize(w, H); camera.aspect = w / H; camera.updateProjectionMatrix(); };
     window.addEventListener("resize", onResize);
-
     return () => {
       cancelAnimationFrame(animId);
       clearTimeout(idleTimer);
@@ -146,7 +134,7 @@ function Ring3DViewer({ modelUrl }) {
         </div>
       )}
       {status === "error" && (
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(13,7,0,0.9)", gap: "8px" }}>
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(13,7,0,0.9)" }}>
           <p style={{ color: "#ff7070", fontSize: "0.85rem" }}>Failed to load model</p>
         </div>
       )}
@@ -168,7 +156,6 @@ function Ring3DViewer({ modelUrl }) {
   );
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
 const data = {
   gold: {
     label: "Gold",
@@ -270,10 +257,9 @@ const data = {
   },
 };
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-export default function Collections() {
-  const [view, setView] = useState("metal"); // metal | categories | items
-  const [selectedMetal, setSelectedMetal] = useState(null);
+export default function Collections({ initialMetal = null }) {
+  const [view, setView] = useState(initialMetal ? "categories" : "metal");
+  const [selectedMetal, setSelectedMetal] = useState(initialMetal);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -311,12 +297,10 @@ export default function Collections() {
         {/* Metal Selection */}
         {view === "metal" && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "28px", maxWidth: "640px", margin: "0 auto" }}>
-            {/* Gold Box */}
             <button type="button" onClick={() => { setSelectedMetal("gold"); setView("categories"); }}
               style={{ border: "none", borderRadius: "16px", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", boxShadow: "0 8px 32px rgba(200,163,58,0.25)" }}>
-              <div style={{ height: "200px", background: data.gold.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-                <div style={{ fontSize: "3.5rem" }}></div>
-                <span style={{ color: "#fff8e7", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "0.08em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>GOLD</span>
+              <div style={{ height: "180px", background: data.gold.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "#fff8e7", fontSize: "2.2rem", fontWeight: 800, letterSpacing: "0.1em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>GOLD</span>
               </div>
               <div style={{ padding: "18px 20px", backgroundColor: "#FDF8EC", borderTop: "2px solid #C8A33A" }}>
                 <h3 style={{ color: "#2B1A12", fontSize: "1rem", fontWeight: "bold", marginBottom: "4px" }}>Gold Jewellery</h3>
@@ -325,12 +309,10 @@ export default function Collections() {
               </div>
             </button>
 
-            {/* Silver Box */}
             <button type="button" onClick={() => { setSelectedMetal("silver"); setView("categories"); }}
               style={{ border: "none", borderRadius: "16px", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", boxShadow: "0 8px 32px rgba(100,140,170,0.2)" }}>
-              <div style={{ height: "200px", background: data.silver.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-                <div style={{ fontSize: "3.5rem" }}></div>
-                <span style={{ color: "#f0f6ff", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "0.08em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>SILVER</span>
+              <div style={{ height: "180px", background: data.silver.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "#f0f6ff", fontSize: "2.2rem", fontWeight: 800, letterSpacing: "0.1em", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>SILVER</span>
               </div>
               <div style={{ padding: "18px 20px", backgroundColor: "#F0F5FA", borderTop: "2px solid #8A9BB0" }}>
                 <h3 style={{ color: "#1A2B3C", fontSize: "1rem", fontWeight: "bold", marginBottom: "4px" }}>Silver Jewellery</h3>
@@ -396,7 +378,6 @@ export default function Collections() {
               style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.8)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
               <X size={16} />
             </button>
-
             {selectedItem.model ? (
               <Ring3DViewer modelUrl={selectedItem.model} />
             ) : selectedItem.image ? (
@@ -406,7 +387,6 @@ export default function Collections() {
             ) : (
               <div style={{ height: "220px", background: selectedCategory?.gradient, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem" }}>{selectedCategory?.icon}</div>
             )}
-
             <div style={{ padding: "18px 24px 28px" }}>
               <h3 style={{ color: "#2B1A12", fontSize: "1.15rem", fontWeight: "bold", marginBottom: "4px" }}>{selectedItem.name}</h3>
               <div style={{ width: 40, height: 2, backgroundColor: accentColor, borderRadius: 1, marginBottom: "16px" }} />

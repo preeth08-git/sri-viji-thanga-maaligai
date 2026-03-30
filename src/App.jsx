@@ -8,16 +8,21 @@ import Contact from "./pages/Contact";
 
 export default function App() {
   const [page, setPage] = useState("home");
-  function renderPage() {
-    if (page === "collections") return <Collections />;
-    if (page === "contact") return <Contact />;
-    return <Home setPage={setPage} />;
-  }
+  const [initialMetal, setInitialMetal] = useState(null);
+
+  const navigateTo = (pageName, metal = null) => {
+    setInitialMetal(metal);
+    setPage(pageName);
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Navbar page={page} setPage={setPage} />
-      <main style={{ flex: 1 }}>{renderPage()}</main>
-      <Footer setPage={setPage} />
+    <div>
+      <Navbar onNavigate={navigateTo} />
+      {page === "home" && <Home onNavigate={navigateTo} />}
+      {page === "collections" && <Collections initialMetal={initialMetal} />}
+      {page === "contact" && <Contact />}
+      <Footer onNavigate={navigateTo} />
       <WhatsAppButton />
     </div>
   );
