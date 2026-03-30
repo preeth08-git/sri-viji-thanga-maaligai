@@ -17,10 +17,20 @@ export default function Navbar({ page, setPage }) {
       </div>
       <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
-          <button type="button" onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", flexDirection: "column", lineHeight: 1 }}>
-            <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold" }}>SRI VIJI</span>
-            <span style={{ color: "#6B5A4B", fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.2em", fontWeight: 600 }}>Thanga Maaligai</span>
+          
+          {/* Shop Name with Marquee */}
+          <button type="button" onClick={() => setPage("home")}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, width: "160px", overflow: "hidden", textAlign: "left" }}>
+            <marquee behavior="scroll" direction="left" scrollamount="3" style={{ display: "block" }}>
+              <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold", marginRight: "32px" }}>
+                SRI VIJI
+              </span>
+              <span style={{ color: "#6B5A4B", fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.2em", fontWeight: 600, marginRight: "32px" }}>
+                Thanga Maaligai
+              </span>
+            </marquee>
           </button>
+
           <nav className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {links.map((link) => (
               <button key={link.id} type="button" onClick={() => setPage(link.id)}
