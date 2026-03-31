@@ -10,15 +10,15 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [initialMetal, setInitialMetal] = useState(null);
 
-  const navigateTo = (pageName, metal = null) => {
-    setInitialMetal(metal);
+  function navigateTo(pageName, metal) {
+    setInitialMetal(metal || null);
     setPage(pageName);
     window.scrollTo(0, 0);
-  };
+  }
 
   return (
     <div>
-      <Navbar onNavigate={navigateTo} />
+      <Navbar page={page} setPage={navigateTo} />
       {page === "home" && <Home onNavigate={navigateTo} />}
       {page === "collections" && <Collections initialMetal={initialMetal} />}
       {page === "contact" && <Contact />}
