@@ -8,19 +8,20 @@ import Contact from "./pages/Contact";
 
 export default function App() {
   const [page, setPage] = useState("home");
-  const [initialMetal, setInitialMetal] = useState(null);
+  const [gender, setGender] = useState(null);
 
-  function navigateTo(pageName, metal) {
-    setInitialMetal(metal || null);
-    setPage(pageName);
+  function navigateTo(pageName) {
+    if (pageName === "men") { setGender("men"); setPage("collections"); }
+    else if (pageName === "women") { setGender("women"); setPage("collections"); }
+    else { setGender(null); setPage(pageName); }
     window.scrollTo(0, 0);
   }
 
   return (
     <div>
-      <Navbar page={page} setPage={navigateTo} />
+      <Navbar page={page} setPage={navigateTo} activePage={page === "collections" && gender ? gender : page} />
       {page === "home" && <Home onNavigate={navigateTo} />}
-      {page === "collections" && <Collections initialMetal={initialMetal} />}
+      {page === "collections" && <Collections initialGender={gender} key={gender} />}
       {page === "contact" && <Contact />}
       <Footer onNavigate={navigateTo} />
       <WhatsAppButton />

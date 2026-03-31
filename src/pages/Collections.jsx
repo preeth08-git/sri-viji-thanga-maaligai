@@ -166,7 +166,7 @@ const data = {
     categories: [
       {
         name: "Rings", icon: "💍", description: "Engagement, wedding & daily wear rings",
-        gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "both",
         items: [
           { id: 1, name: "Diamond Solitaire Ring", weight: "4.8g", karat: "22K Gold", model: "/rings/ring1.glb", image: "/rings/ring1.png" },
           { id: 2, name: "Emerald Cut Ring", weight: "5.2g", karat: "22K Gold", model: "/rings/ring2.glb", image: "/rings/ring2.png" },
@@ -175,8 +175,18 @@ const data = {
         ],
       },
       {
+        name: "Earrings", icon: "✨", description: "Studs, jhumkas & drop earrings",
+        gradient: "linear-gradient(135deg, #D4AF50 0%, #8B6914 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Gold Jhumkas", weight: "8.5g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Diamond Studs", weight: "3.2g", karat: "18K Gold", model: null, image: null },
+          { id: 3, name: "Chandbali Earrings", weight: "12.0g", karat: "22K Gold", model: null, image: null },
+          { id: 4, name: "Hoop Earrings", weight: "6.8g", karat: "22K Gold", model: null, image: null },
+        ],
+      },
+      {
         name: "Chains", icon: "⛓️", description: "Gold chains in various lengths & styles",
-        gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)",
+        gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)", gender: "both",
         items: [
           { id: 1, name: "Box Chain Necklace", weight: "12.5g", karat: "22K Gold", model: null, image: null },
           { id: 2, name: "Rope Chain", weight: "15.8g", karat: "22K Gold", model: null, image: null },
@@ -185,8 +195,18 @@ const data = {
         ],
       },
       {
-        name: "Bangles", icon: "✨", description: "Traditional & modern gold bangle sets",
-        gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)",
+        name: "Necklaces", icon: "📿", description: "Elegant gold necklaces for every occasion",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", model: null, image: null },
+          { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", model: null, image: null },
+          { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", model: null, image: null },
+        ],
+      },
+      {
+        name: "Bangles", icon: "🔱", description: "Traditional & modern gold bangle sets",
+        gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)", gender: "women",
         items: [
           { id: 1, name: "Plain Gold Bangle", weight: "20.0g", karat: "22K Gold", model: null, image: null },
           { id: 2, name: "Patterned Bangle Set", weight: "45.0g", karat: "22K Gold", model: null, image: null },
@@ -195,13 +215,43 @@ const data = {
         ],
       },
       {
-        name: "Necklaces", icon: "📿", description: "Elegant gold necklaces for every occasion",
-        gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)",
+        name: "Bracelets", icon: "🌸", description: "Stylish gold bracelets & kadas",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #7A5010 100%)", gender: "both",
         items: [
-          { id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", model: null, image: null },
+          { id: 1, name: "Classic Gold Bracelet", weight: "14.0g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Tennis Bracelet", weight: "10.5g", karat: "18K Gold", model: null, image: null },
+          { id: 3, name: "Charm Bracelet", weight: "8.2g", karat: "22K Gold", model: null, image: null },
+          { id: 4, name: "Men's Kada", weight: "28.0g", karat: "22K Gold", model: null, image: null },
+        ],
+      },
+      {
+        name: "Pendants", icon: "🌟", description: "God pendants & symbolic designs",
+        gradient: "linear-gradient(135deg, #D2B04C 0%, #6B4F0A 100%)", gender: "both",
+        items: [
+          { id: 1, name: "Ganesha Pendant", weight: "5.5g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Om Pendant", weight: "4.8g", karat: "22K Gold", model: null, image: null },
+          { id: 3, name: "Lakshmi Pendant", weight: "7.2g", karat: "22K Gold", model: null, image: null },
+          { id: 4, name: "Heart Pendant", weight: "3.5g", karat: "18K Gold", model: null, image: null },
+        ],
+      },
+      {
+        name: "Anklets", icon: "🦶", description: "Delicate gold anklets & payal",
+        gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5010 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Plain Gold Anklet", weight: "8.0g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Stone Anklet", weight: "10.5g", karat: "22K Gold", model: null, image: null },
+          { id: 3, name: "Chain Anklet", weight: "6.8g", karat: "18K Gold", model: null, image: null },
+          { id: 4, name: "Bell Anklet", weight: "9.2g", karat: "22K Gold", model: null, image: null },
+        ],
+      },
+      {
+        name: "Nose Pins", icon: "💫", description: "Traditional & modern nose pins",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Plain Nose Pin", weight: "0.5g", karat: "22K Gold", model: null, image: null },
+          { id: 2, name: "Diamond Nose Pin", weight: "0.8g", karat: "18K Gold", model: null, image: null },
+          { id: 3, name: "Stone Nose Pin", weight: "0.6g", karat: "22K Gold", model: null, image: null },
+          { id: 4, name: "Screw Nose Pin", weight: "0.4g", karat: "22K Gold", model: null, image: null },
         ],
       },
     ],
@@ -215,7 +265,7 @@ const data = {
     categories: [
       {
         name: "Rings", icon: "💍", description: "Sterling silver rings for all occasions",
-        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)",
+        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "both",
         items: [
           { id: 1, name: "Silver Toe Ring", weight: "2.1g", karat: "925 Silver", model: null, image: null },
           { id: 2, name: "Oxidised Silver Ring", weight: "3.5g", karat: "925 Silver", model: null, image: null },
@@ -225,7 +275,7 @@ const data = {
       },
       {
         name: "Chains", icon: "⛓️", description: "Silver chains in classic & modern styles",
-        gradient: "linear-gradient(135deg, #A8BFD0 0%, #506070 100%)",
+        gradient: "linear-gradient(135deg, #A8BFD0 0%, #506070 100%)", gender: "both",
         items: [
           { id: 1, name: "Silver Box Chain", weight: "10.5g", karat: "925 Silver", model: null, image: null },
           { id: 2, name: "Rolo Chain", weight: "12.0g", karat: "925 Silver", model: null, image: null },
@@ -234,8 +284,28 @@ const data = {
         ],
       },
       {
-        name: "Anklets", icon: "🌿", description: "Traditional silver anklets & payal",
-        gradient: "linear-gradient(135deg, #B0C8D8 0%, #4A6070 100%)",
+        name: "Bracelets", icon: "🌸", description: "Silver bracelets for all occasions",
+        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "both",
+        items: [
+          { id: 1, name: "Silver Kada", weight: "25.0g", karat: "925 Silver", model: null, image: null },
+          { id: 2, name: "Charm Bracelet", weight: "12.0g", karat: "925 Silver", model: null, image: null },
+          { id: 3, name: "Oxidised Bracelet", weight: "15.5g", karat: "925 Silver", model: null, image: null },
+          { id: 4, name: "Chain Bracelet", weight: "10.0g", karat: "925 Silver", model: null, image: null },
+        ],
+      },
+      {
+        name: "Pendants", icon: "🌟", description: "Silver pendants & spiritual designs",
+        gradient: "linear-gradient(135deg, #A8BFD0 0%, #3D5060 100%)", gender: "both",
+        items: [
+          { id: 1, name: "Ganesha Silver Pendant", weight: "6.0g", karat: "925 Silver", model: null, image: null },
+          { id: 2, name: "Om Silver Pendant", weight: "5.2g", karat: "925 Silver", model: null, image: null },
+          { id: 3, name: "Heart Pendant", weight: "3.8g", karat: "925 Silver", model: null, image: null },
+          { id: 4, name: "Oxidised Pendant", weight: "7.0g", karat: "925 Silver", model: null, image: null },
+        ],
+      },
+      {
+        name: "Anklets", icon: "🦶", description: "Traditional silver anklets & payal",
+        gradient: "linear-gradient(135deg, #B0C8D8 0%, #4A6070 100%)", gender: "women",
         items: [
           { id: 1, name: "Plain Silver Anklet", weight: "15.0g", karat: "925 Silver", model: null, image: null },
           { id: 2, name: "Ghungroo Payal", weight: "22.0g", karat: "925 Silver", model: null, image: null },
@@ -244,8 +314,8 @@ const data = {
         ],
       },
       {
-        name: "Earrings", icon: "✦", description: "Silver earrings for daily & festive wear",
-        gradient: "linear-gradient(135deg, #9AAFC4 0%, #3D5060 100%)",
+        name: "Earrings", icon: "✨", description: "Silver earrings for daily & festive wear",
+        gradient: "linear-gradient(135deg, #9AAFC4 0%, #3D5060 100%)", gender: "women",
         items: [
           { id: 1, name: "Silver Jhumkas", weight: "6.5g", karat: "925 Silver", model: null, image: null },
           { id: 2, name: "Stud Earrings", weight: "2.0g", karat: "925 Silver", model: null, image: null },
@@ -257,7 +327,7 @@ const data = {
   },
 };
 
-export default function Collections({ initialMetal = null }) {
+export default function Collections({ initialMetal = null, initialGender = null }) {
   const [view, setView] = useState(initialMetal ? "categories" : "metal");
   const [selectedMetal, setSelectedMetal] = useState(initialMetal);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -266,10 +336,31 @@ export default function Collections({ initialMetal = null }) {
   const metalData = selectedMetal ? data[selectedMetal] : null;
   const accentColor = metalData?.color || "#C8A33A";
 
+  // Filter categories based on gender when coming from Men/Women nav
+  const visibleCategories = metalData
+    ? (initialGender
+        ? metalData.categories.filter(c => c.gender === initialGender || c.gender === "both")
+        : metalData.categories)
+    : [];
+
   const goBack = () => {
     if (view === "items") { setView("categories"); setSelectedCategory(null); }
     else if (view === "categories") { setView("metal"); setSelectedMetal(null); }
   };
+
+  // Header labels
+  const genderLabel = initialGender === "men" ? "Men's" : initialGender === "women" ? "Women's" : "";
+  const metalLabel = view === "metal"
+    ? (genderLabel ? `${genderLabel} Collections` : "OUR COLLECTIONS")
+    : view === "categories"
+    ? (metalData ? `${genderLabel} ${metalData.label} Collections`.trim() : "")
+    : selectedCategory?.name || "";
+
+  const pageTitle = view === "metal"
+    ? (genderLabel ? `${genderLabel} Jewellery` : "Choose Your Collection")
+    : view === "categories"
+    ? (metalData ? `${genderLabel} ${metalData.label} Jewellery`.trim() : "")
+    : `${selectedCategory?.name} — ${metalData?.label}`;
 
   return (
     <div style={{ backgroundColor: view === "metal" ? "#F7F1E4" : (metalData?.lightBg || "#F7F1E4"), minHeight: "70vh", padding: "48px 0" }}>
@@ -285,12 +376,16 @@ export default function Collections({ initialMetal = null }) {
             </button>
           )}
           <p style={{ color: accentColor, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "4px" }}>
-            {view === "metal" ? "OUR COLLECTIONS" : view === "categories" ? `${metalData?.label} Collections` : selectedCategory?.name}
+            {metalLabel}
           </p>
           <h1 style={{ color: "#2B1A12", fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: "bold" }}>
-            {view === "metal" ? "Choose Your Collection" : view === "categories" ? `${metalData?.label} Jewellery` : `${selectedCategory?.name} — ${metalData?.label}`}
+            {pageTitle}
           </h1>
-          {view === "metal" && <p style={{ color: "#6B5A4B", fontSize: "0.9rem", marginTop: "8px" }}>Select a metal type to explore our jewellery</p>}
+          {view === "metal" && (
+            <p style={{ color: "#6B5A4B", fontSize: "0.9rem", marginTop: "8px" }}>
+              {initialGender ? `Select a metal type to browse ${genderLabel.toLowerCase()} jewellery` : "Select a metal type to explore our jewellery"}
+            </p>
+          )}
           <div style={{ width: 50, height: 3, backgroundColor: accentColor, borderRadius: 2, marginTop: "12px" }} />
         </div>
 
@@ -326,7 +421,7 @@ export default function Collections({ initialMetal = null }) {
         {/* Categories Grid */}
         {view === "categories" && metalData && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px" }}>
-            {metalData.categories.map((cat) => (
+            {visibleCategories.map((cat) => (
               <button key={cat.name} type="button"
                 onClick={() => { setSelectedCategory(cat); setView("items"); }}
                 style={{ border: `1.5px solid ${accentColor}40`, borderRadius: "12px", backgroundColor: metalData.lightBg, overflow: "hidden", cursor: "pointer", width: "100%", padding: 0, textAlign: "left" }}>
