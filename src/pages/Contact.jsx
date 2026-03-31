@@ -43,7 +43,7 @@ export default function Contact() {
                 <div style={{ flex: 1 }}>
                   <h3 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "12px" }}>Working Hours</h3>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", marginBottom: "8px" }}>
-                    <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Monday – Saturday</span>
+                    <span style={{ color: "#6B5A4B", fontSize: "0.875rem" }}>Monday – Sunday</span>
                     <span style={{ color: "#2B1A12", fontSize: "0.875rem", fontWeight: 600 }}>9:30 AM – 10:00 PM</span>
                   </div>
                 </div>
