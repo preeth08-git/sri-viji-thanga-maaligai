@@ -1,160 +1,5 @@
 import { ArrowLeft, X, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
-import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-
-function Ring3DViewer({ modelUrl }) {
-  const mountRef = useRef(null);
-  const ctrlRef = useRef(null);
-  const cameraRef = useRef(null);
-  const [status, setStatus] = useState("loading");
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-    const W = mount.clientWidth || 420;
-    const H = 320;
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.6;
-    mount.appendChild(renderer.domElement);
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#0d0700");
-    const camera = new THREE.PerspectiveCamera(40, W / H, 0.01, 100);
-    camera.position.set(0, 0.5, 4);
-    cameraRef.current = camera;
-    const keyLight = new THREE.DirectionalLight(0xffd580, 4.0);
-    keyLight.position.set(3, 5, 4);
-    keyLight.castShadow = true;
-    scene.add(keyLight);
-    const fillLight = new THREE.DirectionalLight(0xaaddff, 1.2);
-    fillLight.position.set(-4, 1, 2);
-    scene.add(fillLight);
-    const rimLight = new THREE.DirectionalLight(0xffaa44, 1.8);
-    rimLight.position.set(0, -2, -5);
-    scene.add(rimLight);
-    scene.add(new THREE.AmbientLight(0xfff0cc, 0.4));
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.enableZoom = true;
-    controls.minDistance = 1.5;
-    controls.maxDistance = 10;
-    controls.enablePan = false;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 1.5;
-    ctrlRef.current = controls;
-    let idleTimer = null;
-    const stopAutoRotate = () => {
-      controls.autoRotate = false;
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => { controls.autoRotate = true; }, 4000);
-    };
-    renderer.domElement.addEventListener("pointerdown", stopAutoRotate);
-    renderer.domElement.addEventListener("wheel", stopAutoRotate);
-    const loader = new GLTFLoader();
-    let modelGroup = null;
-    loader.load(modelUrl, (gltf) => {
-      modelGroup = new THREE.Group();
-      const model = gltf.scene;
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      const scale = 2.2 / Math.max(size.x, size.y, size.z);
-      model.scale.setScalar(scale);
-      model.position.sub(center.multiplyScalar(scale));
-      model.traverse((child) => {
-        if (child.isMesh && child.material) {
-          const mats = Array.isArray(child.material) ? child.material : [child.material];
-          mats.forEach((mat) => {
-            if (mat.metalness !== undefined) { mat.metalness = Math.max(mat.metalness, 0.85); mat.roughness = Math.min(mat.roughness, 0.25); }
-            mat.envMapIntensity = 2.0; mat.needsUpdate = true;
-          });
-        }
-      });
-      modelGroup.add(model);
-      scene.add(modelGroup);
-      setStatus("ready");
-    }, (xhr) => { if (xhr.total > 0) setProgress(Math.round((xhr.loaded / xhr.total) * 100)); },
-    () => setStatus("error"));
-    let animId, t = 0;
-    const animate = () => {
-      animId = requestAnimationFrame(animate);
-      t += 0.01;
-      if (modelGroup) modelGroup.position.y = Math.sin(t * 0.8) * 0.06;
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-    const onResize = () => { const w = mount.clientWidth; renderer.setSize(w, H); camera.aspect = w / H; camera.updateProjectionMatrix(); };
-    window.addEventListener("resize", onResize);
-    return () => {
-      cancelAnimationFrame(animId);
-      clearTimeout(idleTimer);
-      window.removeEventListener("resize", onResize);
-      controls.dispose();
-      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-      renderer.dispose();
-    };
-  }, [modelUrl]);
-
-  const handleReset = useCallback(() => {
-    if (cameraRef.current && ctrlRef.current) {
-      cameraRef.current.position.set(0, 0.5, 4);
-      ctrlRef.current.target.set(0, 0, 0);
-      ctrlRef.current.autoRotate = true;
-    }
-  }, []);
-
-  const handleZoom = useCallback((dir) => {
-    if (!cameraRef.current || !ctrlRef.current) return;
-    const cam = cameraRef.current;
-    const dist = cam.position.distanceTo(ctrlRef.current.target);
-    const newDist = Math.max(1.5, Math.min(10, dist + dir * 0.6));
-    cam.position.normalize().multiplyScalar(newDist);
-  }, []);
-
-  return (
-    <div style={{ backgroundColor: "#0d0700", position: "relative" }}>
-      <div ref={mountRef} style={{ width: "100%", cursor: "grab", touchAction: "none" }} />
-      {status === "loading" && (
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(13,7,0,0.88)", gap: "12px" }}>
-          <div style={{ width: "44px", height: "44px", border: "3px solid #3a2800", borderTop: "3px solid #C8A33A", borderRadius: "50%", animation: "spin 0.9s linear infinite" }} />
-          <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-          <p style={{ color: "#C8A33A", fontSize: "0.78rem" }}>Loading{progress > 0 ? ` ${progress}%` : "..."}</p>
-          <div style={{ width: "120px", height: "3px", backgroundColor: "#3a2800", borderRadius: "2px" }}>
-            <div style={{ height: "100%", width: `${progress}%`, backgroundColor: "#C8A33A", borderRadius: "2px", transition: "width 0.3s" }} />
-          </div>
-        </div>
-      )}
-      {status === "error" && (
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(13,7,0,0.9)" }}>
-          <p style={{ color: "#ff7070", fontSize: "0.85rem" }}>Failed to load model</p>
-        </div>
-      )}
-      {status === "ready" && (
-        <>
-          <p style={{ position: "absolute", top: "8px", left: "50%", transform: "translateX(-50%)", color: "rgba(215,194,138,0.45)", fontSize: "0.62rem", letterSpacing: "0.06em", whiteSpace: "nowrap", pointerEvents: "none" }}>
-            DRAG TO ROTATE · SCROLL TO ZOOM
-          </p>
-          <div style={{ position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(0,0,0,0.55)", backdropFilter: "blur(6px)", borderRadius: "999px", padding: "5px 12px", border: "1px solid rgba(200,163,58,0.25)" }}>
-            <button type="button" onClick={() => handleZoom(-1)} style={{ background: "none", border: "none", color: "#C8A33A", cursor: "pointer", padding: "2px", display: "flex" }}><ZoomOut size={14} /></button>
-            <div style={{ width: "1px", height: "14px", backgroundColor: "rgba(200,163,58,0.3)" }} />
-            <button type="button" onClick={handleReset} style={{ background: "none", border: "none", color: "#C8A33A", cursor: "pointer", padding: "2px", display: "flex", alignItems: "center", gap: "4px", fontSize: "0.68rem" }}><RotateCcw size={12} /> Reset</button>
-            <div style={{ width: "1px", height: "14px", backgroundColor: "rgba(200,163,58,0.3)" }} />
-            <button type="button" onClick={() => handleZoom(1)} style={{ background: "none", border: "none", color: "#C8A33A", cursor: "pointer", padding: "2px", display: "flex" }}><ZoomIn size={14} /></button>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 const data = {
   gold: {
@@ -164,94 +9,136 @@ const data = {
     bg: "linear-gradient(135deg, #C8A33A 0%, #7A5010 100%)",
     lightBg: "#FAF6EE",
     categories: [
+      // WOMEN
       {
-        name: "Rings", icon: "💍", description: "Engagement, wedding & daily wear rings",
+        name: "Women's Rings", icon: "💍", description: "Engagement, wedding & daily wear rings",
         gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "women",
         items: [
-          { id: 1, name: "Diamond Solitaire Ring", weight: "4.8g", karat: "22K Gold", model: "/rings/ring1.glb", image: "/rings/ring1.png" },
-          { id: 2, name: "Emerald Cut Ring", weight: "5.2g", karat: "22K Gold", model: "/rings/ring2.glb", image: "/rings/ring2.png" },
-          { id: 3, name: "Twisted Diamond Ring", weight: "6.1g", karat: "22K Gold", model: "/rings/ring3.glb", image: "/rings/ring3.png" },
-          { id: 4, name: "Double Heart Ring", weight: "3.9g", karat: "22K Gold", model: "/rings/ring4.glb", image: "/rings/ring4.png" },
+          { id: 1, name: "Diamond Solitaire Ring", weight: "4.8g", karat: "22K Gold", image: "/rings/women-ring1.png" },
+          { id: 2, name: "Emerald Cut Ring", weight: "5.2g", karat: "22K Gold", image: "/rings/women-ring2.png" },
+          { id: 3, name: "Twisted Diamond Ring", weight: "6.1g", karat: "22K Gold", image: "/rings/women-ring3.png" },
+          { id: 4, name: "Double Heart Ring", weight: "3.9g", karat: "22K Gold", image: "/rings/women-ring4.png" },
         ],
       },
       {
-        name: "Earrings", icon: "✨", description: "Studs, jhumkas & drop earrings",
+        name: "Women's Earrings", icon: "✨", description: "Studs, jhumkas & drop earrings",
         gradient: "linear-gradient(135deg, #D4AF50 0%, #8B6914 100%)", gender: "women",
         items: [
-          { id: 1, name: "Gold Jhumkas", weight: "8.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Diamond Studs", weight: "3.2g", karat: "18K Gold", model: null, image: null },
-          { id: 3, name: "Chandbali Earrings", weight: "12.0g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Hoop Earrings", weight: "6.8g", karat: "22K Gold", model: null, image: null },
+          { id: 1, name: "Gold Jhumkas", weight: "8.5g", karat: "22K Gold", image: null },
+          { id: 2, name: "Diamond Studs", weight: "3.2g", karat: "18K Gold", image: null },
+          { id: 3, name: "Chandbali Earrings", weight: "12.0g", karat: "22K Gold", image: null },
+          { id: 4, name: "Hoop Earrings", weight: "6.8g", karat: "22K Gold", image: null },
         ],
       },
       {
-        name: "Chains", icon: "⛓️", description: "Gold chains in various lengths & styles",
-        gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)", gender: "both",
+        name: "Women's Chains", icon: "⛓️", description: "Delicate gold chains for women",
+        gradient: "linear-gradient(135deg, #D2B04C 0%, #9A7520 100%)", gender: "women",
         items: [
-          { id: 1, name: "Box Chain Necklace", weight: "12.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Rope Chain", weight: "15.8g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Flat Curb Chain", weight: "18.2g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Singapore Chain", weight: "10.4g", karat: "18K Gold", model: null, image: null },
+          { id: 1, name: "Box Chain Necklace", weight: "12.5g", karat: "22K Gold", image: null },
+          { id: 2, name: "Singapore Chain", weight: "10.4g", karat: "18K Gold", image: null },
+          { id: 3, name: "Flat Curb Chain", weight: "18.2g", karat: "22K Gold", image: null },
+          { id: 4, name: "Rope Chain", weight: "15.8g", karat: "22K Gold", image: null },
         ],
       },
       {
-        name: "Necklaces", icon: "📿", description: "Elegant gold necklaces for every occasion",
+        name: "Women's Necklaces", icon: "📿", description: "Elegant gold necklaces for every occasion",
         gradient: "linear-gradient(135deg, #C8A33A 0%, #6B4F0A 100%)", gender: "women",
         items: [
-          { id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", model: null, image: null },
+          { id: 1, name: "Lakshmi Pendant Necklace", weight: "28.5g", karat: "22K Gold", image: null },
+          { id: 2, name: "Traditional Thali Set", weight: "35.0g", karat: "22K Gold", image: null },
+          { id: 3, name: "Kundan Necklace", weight: "42.2g", karat: "22K Gold", image: null },
+          { id: 4, name: "Simple Gold Choker", weight: "18.8g", karat: "18K Gold", image: null },
         ],
       },
       {
-        name: "Bangles", icon: "🔱", description: "Traditional & modern gold bangle sets",
+        name: "Women's Bangles", icon: "🔱", description: "Traditional & modern gold bangle sets",
         gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5C10 100%)", gender: "women",
         items: [
-          { id: 1, name: "Plain Gold Bangle", weight: "20.0g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Patterned Bangle Set", weight: "45.0g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Kada Bangle", weight: "32.5g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Twisted Bangle", weight: "22.8g", karat: "18K Gold", model: null, image: null },
+          { id: 1, name: "Plain Gold Bangle", weight: "20.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Patterned Bangle Set", weight: "45.0g", karat: "22K Gold", image: null },
+          { id: 3, name: "Kada Bangle", weight: "32.5g", karat: "22K Gold", image: null },
+          { id: 4, name: "Twisted Bangle", weight: "22.8g", karat: "18K Gold", image: null },
         ],
       },
       {
-        name: "Bracelets", icon: "🌸", description: "Stylish gold bracelets & kadas",
-        gradient: "linear-gradient(135deg, #C8A33A 0%, #7A5010 100%)", gender: "both",
+        name: "Women's Bracelets", icon: "🌸", description: "Stylish gold bracelets for women",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #7A5010 100%)", gender: "women",
         items: [
-          { id: 1, name: "Classic Gold Bracelet", weight: "14.0g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Tennis Bracelet", weight: "10.5g", karat: "18K Gold", model: null, image: null },
-          { id: 3, name: "Charm Bracelet", weight: "8.2g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Men's Kada", weight: "28.0g", karat: "22K Gold", model: null, image: null },
+          { id: 1, name: "Classic Gold Bracelet", weight: "14.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Tennis Bracelet", weight: "10.5g", karat: "18K Gold", image: null },
+          { id: 3, name: "Charm Bracelet", weight: "8.2g", karat: "22K Gold", image: null },
+          { id: 4, name: "Stone Bracelet", weight: "12.0g", karat: "22K Gold", image: null },
         ],
       },
       {
-        name: "Pendants", icon: "🌟", description: "God pendants & symbolic designs",
-        gradient: "linear-gradient(135deg, #D2B04C 0%, #6B4F0A 100%)", gender: "both",
+        name: "Women's Pendants", icon: "🌟", description: "God pendants & symbolic designs for women",
+        gradient: "linear-gradient(135deg, #D2B04C 0%, #6B4F0A 100%)", gender: "women",
         items: [
-          { id: 1, name: "Ganesha Pendant", weight: "5.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Om Pendant", weight: "4.8g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Lakshmi Pendant", weight: "7.2g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Heart Pendant", weight: "3.5g", karat: "18K Gold", model: null, image: null },
+          { id: 1, name: "Lakshmi Pendant", weight: "7.2g", karat: "22K Gold", image: null },
+          { id: 2, name: "Heart Pendant", weight: "3.5g", karat: "18K Gold", image: null },
+          { id: 3, name: "Ganesha Pendant", weight: "5.5g", karat: "22K Gold", image: null },
+          { id: 4, name: "Om Pendant", weight: "4.8g", karat: "22K Gold", image: null },
         ],
       },
       {
-        name: "Anklets", icon: "🦶", description: "Delicate gold anklets & payal",
+        name: "Women's Anklets", icon: "🦶", description: "Delicate gold anklets & payal",
         gradient: "linear-gradient(135deg, #BF9A30 0%, #7A5010 100%)", gender: "women",
         items: [
-          { id: 1, name: "Plain Gold Anklet", weight: "8.0g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Stone Anklet", weight: "10.5g", karat: "22K Gold", model: null, image: null },
-          { id: 3, name: "Chain Anklet", weight: "6.8g", karat: "18K Gold", model: null, image: null },
-          { id: 4, name: "Bell Anklet", weight: "9.2g", karat: "22K Gold", model: null, image: null },
+          { id: 1, name: "Plain Gold Anklet", weight: "8.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Stone Anklet", weight: "10.5g", karat: "22K Gold", image: null },
+          { id: 3, name: "Chain Anklet", weight: "6.8g", karat: "18K Gold", image: null },
+          { id: 4, name: "Bell Anklet", weight: "9.2g", karat: "22K Gold", image: null },
         ],
       },
       {
         name: "Nose Pins", icon: "💫", description: "Traditional & modern nose pins",
         gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "women",
         items: [
-          { id: 1, name: "Plain Nose Pin", weight: "0.5g", karat: "22K Gold", model: null, image: null },
-          { id: 2, name: "Diamond Nose Pin", weight: "0.8g", karat: "18K Gold", model: null, image: null },
-          { id: 3, name: "Stone Nose Pin", weight: "0.6g", karat: "22K Gold", model: null, image: null },
-          { id: 4, name: "Screw Nose Pin", weight: "0.4g", karat: "22K Gold", model: null, image: null },
+          { id: 1, name: "Plain Nose Pin", weight: "0.5g", karat: "22K Gold", image: null },
+          { id: 2, name: "Diamond Nose Pin", weight: "0.8g", karat: "18K Gold", image: null },
+          { id: 3, name: "Stone Nose Pin", weight: "0.6g", karat: "22K Gold", image: null },
+          { id: 4, name: "Screw Nose Pin", weight: "0.4g", karat: "22K Gold", image: null },
+        ],
+      },
+      // MEN
+      {
+        name: "Men's Rings", icon: "💍", description: "Bold & classic rings for men",
+        gradient: "linear-gradient(135deg, #A07820 0%, #5A3A08 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Men's Band Ring", weight: "6.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Men's Signet Ring", weight: "8.5g", karat: "22K Gold", image: null },
+          { id: 3, name: "Men's Stone Ring", weight: "7.2g", karat: "22K Gold", image: null },
+          { id: 4, name: "Men's Kada Ring", weight: "10.0g", karat: "22K Gold", image: null },
+        ],
+      },
+      {
+        name: "Men's Chains", icon: "⛓️", description: "Heavy gold chains for men",
+        gradient: "linear-gradient(135deg, #A07820 0%, #5A3A08 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Heavy Curb Chain", weight: "25.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Thick Rope Chain", weight: "30.0g", karat: "22K Gold", image: null },
+          { id: 3, name: "Franco Chain", weight: "22.5g", karat: "22K Gold", image: null },
+          { id: 4, name: "Wheat Chain", weight: "18.0g", karat: "22K Gold", image: null },
+        ],
+      },
+      {
+        name: "Men's Bracelets", icon: "💪", description: "Gold kadas & bracelets for men",
+        gradient: "linear-gradient(135deg, #A07820 0%, #5A3A08 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Men's Gold Kada", weight: "30.0g", karat: "22K Gold", image: null },
+          { id: 2, name: "Men's Link Bracelet", weight: "18.0g", karat: "22K Gold", image: null },
+          { id: 3, name: "Men's Curb Bracelet", weight: "22.0g", karat: "22K Gold", image: null },
+          { id: 4, name: "Men's Figaro Bracelet", weight: "20.0g", karat: "18K Gold", image: null },
+        ],
+      },
+      {
+        name: "Men's Pendants", icon: "🌟", description: "Spiritual & bold pendants for men",
+        gradient: "linear-gradient(135deg, #A07820 0%, #5A3A08 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Ganesha Pendant", weight: "6.5g", karat: "22K Gold", image: null },
+          { id: 2, name: "Om Pendant", weight: "5.5g", karat: "22K Gold", image: null },
+          { id: 3, name: "Cross Pendant", weight: "4.8g", karat: "22K Gold", image: null },
+          { id: 4, name: "Lion Pendant", weight: "8.0g", karat: "22K Gold", image: null },
         ],
       },
     ],
@@ -263,64 +150,106 @@ const data = {
     bg: "linear-gradient(135deg, #9EB3C8 0%, #3A4D5C 100%)",
     lightBg: "#F0F4F8",
     categories: [
+      // WOMEN
       {
-        name: "Rings", icon: "💍", description: "Sterling silver rings for all occasions",
+        name: "Women's Rings", icon: "💍", description: "Sterling silver rings for women",
         gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "women",
         items: [
-          { id: 1, name: "Silver Toe Ring", weight: "2.1g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Oxidised Silver Ring", weight: "3.5g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Stone Silver Ring", weight: "4.0g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Plain Band Ring", weight: "2.8g", karat: "925 Silver", model: null, image: null },
+          { id: 1, name: "Silver Toe Ring", weight: "2.1g", karat: "925 Silver", image: null },
+          { id: 2, name: "Oxidised Silver Ring", weight: "3.5g", karat: "925 Silver", image: null },
+          { id: 3, name: "Stone Silver Ring", weight: "4.0g", karat: "925 Silver", image: null },
+          { id: 4, name: "Floral Silver Ring", weight: "2.8g", karat: "925 Silver", image: null },
         ],
       },
       {
-        name: "Chains", icon: "⛓️", description: "Silver chains in classic & modern styles",
-        gradient: "linear-gradient(135deg, #A8BFD0 0%, #506070 100%)", gender: "both",
-        items: [
-          { id: 1, name: "Silver Box Chain", weight: "10.5g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Rolo Chain", weight: "12.0g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Figaro Chain", weight: "14.2g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Wheat Chain", weight: "9.8g", karat: "925 Silver", model: null, image: null },
-        ],
-      },
-      {
-        name: "Bracelets", icon: "🌸", description: "Silver bracelets for all occasions",
-        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "both",
-        items: [
-          { id: 1, name: "Silver Kada", weight: "25.0g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Charm Bracelet", weight: "12.0g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Oxidised Bracelet", weight: "15.5g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Chain Bracelet", weight: "10.0g", karat: "925 Silver", model: null, image: null },
-        ],
-      },
-      {
-        name: "Pendants", icon: "🌟", description: "Silver pendants & spiritual designs",
-        gradient: "linear-gradient(135deg, #A8BFD0 0%, #3D5060 100%)", gender: "both",
-        items: [
-          { id: 1, name: "Ganesha Silver Pendant", weight: "6.0g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Om Silver Pendant", weight: "5.2g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Heart Pendant", weight: "3.8g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Oxidised Pendant", weight: "7.0g", karat: "925 Silver", model: null, image: null },
-        ],
-      },
-      {
-        name: "Anklets", icon: "🦶", description: "Traditional silver anklets & payal",
-        gradient: "linear-gradient(135deg, #B0C8D8 0%, #4A6070 100%)", gender: "women",
-        items: [
-          { id: 1, name: "Plain Silver Anklet", weight: "15.0g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Ghungroo Payal", weight: "22.0g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Leaf Design Anklet", weight: "18.5g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Oxidised Payal", weight: "20.0g", karat: "925 Silver", model: null, image: null },
-        ],
-      },
-      {
-        name: "Earrings", icon: "✨", description: "Silver earrings for daily & festive wear",
+        name: "Women's Earrings", icon: "✨", description: "Silver earrings for daily & festive wear",
         gradient: "linear-gradient(135deg, #9AAFC4 0%, #3D5060 100%)", gender: "women",
         items: [
-          { id: 1, name: "Silver Jhumkas", weight: "6.5g", karat: "925 Silver", model: null, image: null },
-          { id: 2, name: "Stud Earrings", weight: "2.0g", karat: "925 Silver", model: null, image: null },
-          { id: 3, name: "Hoop Earrings", weight: "4.5g", karat: "925 Silver", model: null, image: null },
-          { id: 4, name: "Chandbali Earrings", weight: "8.0g", karat: "925 Silver", model: null, image: null },
+          { id: 1, name: "Silver Jhumkas", weight: "6.5g", karat: "925 Silver", image: null },
+          { id: 2, name: "Stud Earrings", weight: "2.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Hoop Earrings", weight: "4.5g", karat: "925 Silver", image: null },
+          { id: 4, name: "Chandbali Earrings", weight: "8.0g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Women's Chains", icon: "⛓️", description: "Delicate silver chains for women",
+        gradient: "linear-gradient(135deg, #A8BFD0 0%, #506070 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Silver Box Chain", weight: "10.5g", karat: "925 Silver", image: null },
+          { id: 2, name: "Rolo Chain", weight: "12.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Singapore Chain", weight: "9.8g", karat: "925 Silver", image: null },
+          { id: 4, name: "Thin Rope Chain", weight: "8.5g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Women's Bracelets", icon: "🌸", description: "Silver bracelets for women",
+        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Charm Bracelet", weight: "12.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Oxidised Bracelet", weight: "15.5g", karat: "925 Silver", image: null },
+          { id: 3, name: "Chain Bracelet", weight: "10.0g", karat: "925 Silver", image: null },
+          { id: 4, name: "Floral Bracelet", weight: "11.0g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Women's Pendants", icon: "🌟", description: "Silver pendants for women",
+        gradient: "linear-gradient(135deg, #A8BFD0 0%, #3D5060 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Lakshmi Silver Pendant", weight: "6.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Heart Pendant", weight: "3.8g", karat: "925 Silver", image: null },
+          { id: 3, name: "Oxidised Pendant", weight: "7.0g", karat: "925 Silver", image: null },
+          { id: 4, name: "Moon & Star Pendant", weight: "4.5g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Women's Anklets", icon: "🦶", description: "Traditional silver anklets & payal",
+        gradient: "linear-gradient(135deg, #B0C8D8 0%, #4A6070 100%)", gender: "women",
+        items: [
+          { id: 1, name: "Plain Silver Anklet", weight: "15.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Ghungroo Payal", weight: "22.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Leaf Design Anklet", weight: "18.5g", karat: "925 Silver", image: null },
+          { id: 4, name: "Oxidised Payal", weight: "20.0g", karat: "925 Silver", image: null },
+        ],
+      },
+      // MEN
+      {
+        name: "Men's Rings", icon: "💍", description: "Bold sterling silver rings for men",
+        gradient: "linear-gradient(135deg, #607080 0%, #2A3A48 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Men's Band Ring", weight: "5.5g", karat: "925 Silver", image: null },
+          { id: 2, name: "Men's Signet Ring", weight: "8.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Men's Stone Ring", weight: "6.5g", karat: "925 Silver", image: null },
+          { id: 4, name: "Men's Oxidised Ring", weight: "4.8g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Men's Chains", icon: "⛓️", description: "Heavy silver chains for men",
+        gradient: "linear-gradient(135deg, #607080 0%, #2A3A48 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Heavy Curb Chain", weight: "28.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Figaro Chain", weight: "22.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Franco Chain", weight: "25.0g", karat: "925 Silver", image: null },
+          { id: 4, name: "Wheat Chain", weight: "18.0g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Men's Bracelets", icon: "💪", description: "Silver kadas & bracelets for men",
+        gradient: "linear-gradient(135deg, #607080 0%, #2A3A48 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Silver Kada", weight: "25.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Men's Link Bracelet", weight: "18.0g", karat: "925 Silver", image: null },
+          { id: 3, name: "Men's Oxidised Bracelet", weight: "20.0g", karat: "925 Silver", image: null },
+          { id: 4, name: "Men's Chain Bracelet", weight: "15.0g", karat: "925 Silver", image: null },
+        ],
+      },
+      {
+        name: "Men's Pendants", icon: "🌟", description: "Spiritual & bold silver pendants for men",
+        gradient: "linear-gradient(135deg, #607080 0%, #2A3A48 100%)", gender: "men",
+        items: [
+          { id: 1, name: "Ganesha Silver Pendant", weight: "7.0g", karat: "925 Silver", image: null },
+          { id: 2, name: "Om Silver Pendant", weight: "5.5g", karat: "925 Silver", image: null },
+          { id: 3, name: "Cross Pendant", weight: "4.5g", karat: "925 Silver", image: null },
+          { id: 4, name: "Lion Pendant", weight: "9.0g", karat: "925 Silver", image: null },
         ],
       },
     ],
@@ -336,10 +265,9 @@ export default function Collections({ initialMetal = null, initialGender = null 
   const metalData = selectedMetal ? data[selectedMetal] : null;
   const accentColor = metalData?.color || "#C8A33A";
 
-  // Filter categories based on gender when coming from Men/Women nav
   const visibleCategories = metalData
     ? (initialGender
-        ? metalData.categories.filter(c => c.gender === initialGender || c.gender === "both")
+        ? metalData.categories.filter(c => c.gender === initialGender)
         : metalData.categories)
     : [];
 
@@ -348,19 +276,19 @@ export default function Collections({ initialMetal = null, initialGender = null 
     else if (view === "categories") { setView("metal"); setSelectedMetal(null); }
   };
 
-  // Header labels
   const genderLabel = initialGender === "men" ? "Men's" : initialGender === "women" ? "Women's" : "";
-  const metalLabel = view === "metal"
-    ? (genderLabel ? `${genderLabel} Collections` : "OUR COLLECTIONS")
-    : view === "categories"
-    ? (metalData ? `${genderLabel} ${metalData.label} Collections`.trim() : "")
-    : selectedCategory?.name || "";
 
   const pageTitle = view === "metal"
     ? (genderLabel ? `${genderLabel} Jewellery` : "Choose Your Collection")
     : view === "categories"
-    ? (metalData ? `${genderLabel} ${metalData.label} Jewellery`.trim() : "")
+    ? (metalData ? `${genderLabel ? genderLabel + " " : ""}${metalData.label} Jewellery` : "")
     : `${selectedCategory?.name} — ${metalData?.label}`;
+
+  const metalLabel = view === "metal"
+    ? (genderLabel ? `${genderLabel} Collections`.toUpperCase() : "OUR COLLECTIONS")
+    : view === "categories"
+    ? (metalData ? `${genderLabel ? genderLabel + " " : ""}${metalData.label} Collections`.toUpperCase() : "")
+    : selectedCategory?.name?.toUpperCase() || "";
 
   return (
     <div style={{ backgroundColor: view === "metal" ? "#F7F1E4" : (metalData?.lightBg || "#F7F1E4"), minHeight: "70vh", padding: "48px 0" }}>
@@ -454,9 +382,6 @@ export default function Collections({ initialMetal = null, initialGender = null 
                   <h4 style={{ color: "#2B1A12", fontSize: "0.75rem", fontWeight: 600, marginBottom: "4px" }}>{item.name}</h4>
                   <p style={{ color: "#6B5A4B", fontSize: "0.72rem" }}>{item.karat} · {item.weight}</p>
                 </div>
-                {item.model && (
-                  <div style={{ backgroundColor: accentColor, color: "#2B1A12", textAlign: "center", fontSize: "0.65rem", fontWeight: 700, padding: "3px", letterSpacing: "0.08em" }}>3D VIEW</div>
-                )}
               </button>
             ))}
           </div>
@@ -473,9 +398,7 @@ export default function Collections({ initialMetal = null, initialGender = null 
               style={{ position: "absolute", top: "12px", right: "12px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "rgba(43,26,18,0.8)", color: "#F7F1E4", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
               <X size={16} />
             </button>
-            {selectedItem.model ? (
-              <Ring3DViewer modelUrl={selectedItem.model} />
-            ) : selectedItem.image ? (
+            {selectedItem.image ? (
               <div style={{ height: "240px", backgroundColor: "#1a0f08", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <img src={selectedItem.image} alt={selectedItem.name} style={{ maxHeight: "220px", maxWidth: "90%", objectFit: "contain" }} />
               </div>
