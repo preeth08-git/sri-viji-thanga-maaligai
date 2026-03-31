@@ -1,7 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-export default function Navbar({ page, setPage }) {
+export default function Navbar({ page, onNavigate }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const links = [
     { id: "home", label: "Home" },
@@ -17,10 +17,8 @@ export default function Navbar({ page, setPage }) {
       </div>
       <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
-
-          {/* Shop Name with Marquee — full name, full size */}
-          <button type="button" onClick={() => setPage("home")}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, width: "220px", overflow: "hidden" }}>
+          <button type="button" onClick={() => onNavigate("home")}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, width: "220px", overflow: "hidden", textAlign: "left" }}>
             <marquee behavior="scroll" direction="left" scrollamount="3" style={{ display: "block" }}>
               <span style={{ color: "#C8A33A", fontSize: "1.3rem", letterSpacing: "0.04em", fontWeight: "bold", marginRight: "48px", whiteSpace: "nowrap" }}>
                 SRI VIJI THANGA MAALIGAI
@@ -30,7 +28,7 @@ export default function Navbar({ page, setPage }) {
 
           <nav className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {links.map((link) => (
-              <button key={link.id} type="button" onClick={() => setPage(link.id)}
+              <button key={link.id} type="button" onClick={() => onNavigate(link.id)}
                 style={{ border: "1.5px solid #C8A33A", color: page === link.id ? "#FAF6EE" : "#2B1A12", backgroundColor: page === link.id ? "#C8A33A" : "transparent", borderRadius: "999px", padding: "6px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>
                 {link.label}
               </button>
@@ -44,7 +42,7 @@ export default function Navbar({ page, setPage }) {
         {mobileOpen && (
           <nav style={{ borderTop: "1px solid #D7C28A", paddingBottom: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
             {links.map((link) => (
-              <button key={link.id} type="button" onClick={() => { setPage(link.id); setMobileOpen(false); }}
+              <button key={link.id} type="button" onClick={() => { onNavigate(link.id); setMobileOpen(false); }}
                 style={{ border: "1.5px solid #C8A33A", color: page === link.id ? "#FAF6EE" : "#2B1A12", backgroundColor: page === link.id ? "#C8A33A" : "transparent", borderRadius: "999px", padding: "8px 20px", fontSize: "0.9rem", fontWeight: 600, cursor: "pointer", marginTop: "6px", textAlign: "center" }}>
                 {link.label}
               </button>
@@ -54,5 +52,36 @@ export default function Navbar({ page, setPage }) {
       </div>
       <style>{`@media (max-width: 768px) { .desktop-nav { display: none !important; } .mobile-menu-btn { display: block !important; } }`}</style>
     </header>
+  );
+}
+src/App.jsx — pass page to Navbar so active highlighting works:
+
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import WhatsAppButton from "./components/WhatsAppButton";
+import Home from "./pages/Home";
+import Collections from "./pages/Collections";
+import Contact from "./pages/Contact";
+
+export default function App() {
+  const [page, setPage] = useState("home");
+  const [initialMetal, setInitialMetal] = useState(null);
+
+  const navigateTo = (pageName, metal = null) => {
+    setInitialMetal(metal);
+    setPage(pageName);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div>
+      <Navbar page={page} onNavigate={navigateTo} />
+      {page === "home" && <Home onNavigate={navigateTo} />}
+      {page === "collections" && <Collections initialMetal={initialMetal} />}
+      {page === "contact" && <Contact />}
+      <Footer onNavigate={navigateTo} />
+      <WhatsAppButton />
+    </div>
   );
 }
