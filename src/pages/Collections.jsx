@@ -166,7 +166,7 @@ const data = {
     categories: [
       {
         name: "Rings", icon: "💍", description: "Engagement, wedding & daily wear rings",
-        gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "both",
+        gradient: "linear-gradient(135deg, #C8A33A 0%, #8B6914 100%)", gender: "women",
         items: [
           { id: 1, name: "Diamond Solitaire Ring", weight: "4.8g", karat: "22K Gold", model: "/rings/ring1.glb", image: "/rings/ring1.png" },
           { id: 2, name: "Emerald Cut Ring", weight: "5.2g", karat: "22K Gold", model: "/rings/ring2.glb", image: "/rings/ring2.png" },
@@ -265,7 +265,7 @@ const data = {
     categories: [
       {
         name: "Rings", icon: "💍", description: "Sterling silver rings for all occasions",
-        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "both",
+        gradient: "linear-gradient(135deg, #9EB3C8 0%, #4A6275 100%)", gender: "women",
         items: [
           { id: 1, name: "Silver Toe Ring", weight: "2.1g", karat: "925 Silver", model: null, image: null },
           { id: 2, name: "Oxidised Silver Ring", weight: "3.5g", karat: "925 Silver", model: null, image: null },
