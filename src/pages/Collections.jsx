@@ -1,23 +1,44 @@
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const WHATSAPP_NUMBER = "919840686575";
+const UNSPLASH_ACCESS_KEY = "eEtSQ8OCdP2pSb25C6bRf2TzPlsELsue9EBQcJfOrkU"; // free at unsplash.com/developers
 
 function waLink(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-// Generates a Pollinations.ai image URL from a prompt + unique seed
-function aiImageUrl(prompt, seed) {
-  const encoded = encodeURIComponent(prompt);
-  return `https://image.pollinations.ai/prompt/${encoded}?seed=${seed}&width=400&height=400&nologo=true`;
-}
+// Map category names to focused Unsplash search queries
+const SEARCH_QUERIES = {
+  "Women's Rings": "gold women ring jewellery",
+  "Women's Earrings": "gold women earrings jewellery",
+  "Women's Chains": "gold women chain necklace",
+  "Women's Necklaces": "gold women necklace jewellery",
+  "Women's Bangles": "gold bangle bracelet women",
+  "Women's Bracelets": "gold women bracelet jewellery",
+  "Women's Pendants": "gold women pendant jewellery",
+  "Women's Anklets": "gold anklet payal women",
+  "Nose Pins": "gold nose pin jewellery",
+  "Men's Rings": "gold men ring jewellery",
+  "Men's Chains": "gold men chain necklace",
+  "Men's Bracelets": "gold men bracelet kada",
+  "Men's Pendants": "gold men pendant jewellery",
+};
 
-// Generate prompt for a given category + metal
-function imagePrompt(categoryName, metal) {
-  const base = `${categoryName}, ${metal} jewellery, luxury product photography, white background, high detail, professional studio lighting`;
-  return base;
-}
+const SILVER_QUERIES = {
+  "Women's Rings": "silver women ring jewellery",
+  "Women's Earrings": "silver women earrings jewellery",
+  "Women's Chains": "silver women chain necklace",
+  "Women's Bracelets": "silver women bracelet jewellery",
+  "Women's Pendants": "silver women pendant jewellery",
+  "Women's Anklets": "silver anklet payal women",
+  "Men's Rings": "silver men ring jewellery",
+  "Men's Chains": "silver men chain necklace",
+  "Men's Bracelets": "silver men bracelet kada",
+  "Men's Pendants": "silver men pendant jewellery",
+};
+
+const BATCH_SIZE = 6;
 
 const data = {
   gold: {
@@ -63,50 +84,70 @@ const data = {
   },
 };
 
-const BATCH_SIZE = 6;
-
 function DesignGrid({ category, metal, accentColor, lightBg }) {
-  const [count, setCount] = useState(BATCH_SIZE);
-  const [loadedSeeds, setLoadedSeeds] = useState(() =>
-    Array.from({ length: BATCH_SIZE }, (_, i) => i + 1)
-  );
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const prompt = imagePrompt(category.name, metal.label);
+  const queries = metal.label === "Gold" ? SEARCH_QUERIES : SILVER_QUERIES;
+  const query = queries[category.name] || `${category.name} ${metal.label} jewellery`;
+
+  const fetchImages = async (pageNum) => {
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=${BATCH_SIZE}&page=${pageNum}&orientation=squarish`,
+        { headers: { Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}` } }
+      );
+      const json = await res.json();
+      const newImgs = (json.results || []).map(r => ({
+        id: r.id,
+        url: r.urls.small,
+        alt: r.alt_description || category.name,
+      }));
+      setImages(prev => pageNum === 1 ? newImgs : [...prev, ...newImgs]);
+    } catch {
+      setError(true);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchImages(1);
+  }, [category.name]);
 
   const handleShowMore = () => {
-    const nextSeeds = Array.from(
-      { length: BATCH_SIZE },
-      (_, i) => loadedSeeds.length + i + 1
-    );
-    setLoadedSeeds(prev => [...prev, ...nextSeeds]);
-    setCount(prev => prev + BATCH_SIZE);
+    const next = page + 1;
+    setPage(next);
+    fetchImages(next);
   };
 
   const waMsg = `Hi, I'm interested in ${category.name} (${metal.label}). Please share available designs and pricing.`;
 
   return (
     <div>
+      {error && (
+        <p style={{ color: "#c0392b", textAlign: "center", marginBottom: "16px", fontSize: "0.85rem" }}>
+          Could not load images. Please check your Unsplash API key.
+        </p>
+      )}
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px", marginBottom: "32px" }}>
-        {loadedSeeds.map((seed) => (
-          <div key={seed}
+        {images.map((img, idx) => (
+          <div key={img.id}
             style={{ border: `1.5px solid ${accentColor}30`, borderRadius: "10px", backgroundColor: lightBg, overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.07)" }}>
-            <div style={{ position: "relative", height: "180px", backgroundColor: "#f0e8d4" }}>
+            <div style={{ height: "180px", backgroundColor: "#f0e8d4", overflow: "hidden" }}>
               <img
-                src={aiImageUrl(prompt, seed)}
-                alt={`${category.name} design ${seed}`}
+                src={img.url}
+                alt={img.alt}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                onError={(e) => {
-                  e.target.style.display = "none";
-                  e.target.nextSibling.style.display = "flex";
-                }}
               />
-              <div style={{ display: "none", position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", fontSize: "2.5rem", backgroundColor: "#f5eed8" }}>
-                {category.icon}
-              </div>
             </div>
             <div style={{ padding: "10px 12px", textAlign: "center" }}>
               <p style={{ color: "#2B1A12", fontSize: "0.78rem", fontWeight: 600, marginBottom: "8px" }}>
-                Design #{seed}
+                Design #{idx + 1}
               </p>
               <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: "4px", backgroundColor: "#25D366", color: "#fff", borderRadius: "999px", padding: "5px 12px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none" }}>
@@ -118,17 +159,31 @@ function DesignGrid({ category, metal, accentColor, lightBg }) {
             </div>
           </div>
         ))}
+
+        {/* Loading skeletons */}
+        {loading && Array.from({ length: BATCH_SIZE }).map((_, i) => (
+          <div key={`sk-${i}`}
+            style={{ border: `1.5px solid ${accentColor}20`, borderRadius: "10px", backgroundColor: lightBg, overflow: "hidden" }}>
+            <div style={{ height: "180px", backgroundColor: "#e8dfc8", animation: "pulse 1.5s ease-in-out infinite" }} />
+            <div style={{ padding: "10px 12px" }}>
+              <div style={{ height: "12px", backgroundColor: "#e0d8c8", borderRadius: "4px", marginBottom: "8px" }} />
+              <div style={{ height: "24px", backgroundColor: "#d4ccb8", borderRadius: "999px" }} />
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div style={{ textAlign: "center", marginBottom: "16px" }}>
-        <button type="button" onClick={handleShowMore}
-          style={{ backgroundColor: accentColor, color: "#2B1A12", border: "none", borderRadius: "999px", padding: "12px 32px", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 16px rgba(200,163,58,0.3)" }}>
-          Show More Designs ✨
-        </button>
-        <p style={{ color: "#6B5A4B", fontSize: "0.75rem", marginTop: "8px" }}>
-          These are AI-generated design inspirations. Visit our store to see actual pieces.
-        </p>
-      </div>
+      {!loading && images.length > 0 && (
+        <div style={{ textAlign: "center", marginBottom: "16px" }}>
+          <button type="button" onClick={handleShowMore}
+            style={{ backgroundColor: accentColor, color: "#2B1A12", border: "none", borderRadius: "999px", padding: "12px 32px", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 16px rgba(200,163,58,0.3)" }}>
+            Show More Designs ✨
+          </button>
+          <p style={{ color: "#6B5A4B", fontSize: "0.75rem", marginTop: "8px" }}>
+            Showing reference designs. Visit our store to see actual pieces.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -157,7 +212,6 @@ export default function Collections({ initialMetal = null, initialGender = null 
     <div style={{ backgroundColor: selectedMetal ? (metalData?.lightBg || "#F7F1E4") : "#F7F1E4", minHeight: "70vh", padding: "48px 0" }}>
       <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px" }}>
 
-        {/* Header */}
         <div style={{ marginBottom: "40px" }}>
           {(selectedMetal || selectedCategory) && (
             <button type="button" onClick={goBack}
@@ -167,11 +221,7 @@ export default function Collections({ initialMetal = null, initialGender = null 
             </button>
           )}
           <p style={{ color: accentColor, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600, marginBottom: "4px" }}>
-            {selectedCategory
-              ? selectedCategory.name.toUpperCase()
-              : selectedMetal
-              ? `${genderLabel ? genderLabel + " " : ""}${metalData.label} Collections`.toUpperCase()
-              : "OUR COLLECTIONS"}
+            {selectedCategory ? selectedCategory.name.toUpperCase() : selectedMetal ? `${genderLabel ? genderLabel + " " : ""}${metalData.label} Collections`.toUpperCase() : "OUR COLLECTIONS"}
           </p>
           <h1 style={{ color: "#2B1A12", fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: "bold" }}>
             {selectedCategory
@@ -180,20 +230,14 @@ export default function Collections({ initialMetal = null, initialGender = null 
               ? `${genderLabel ? genderLabel + " " : ""}${metalData.label} Jewellery`
               : (genderLabel ? `${genderLabel} Jewellery` : "Choose Your Collection")}
           </h1>
-          {selectedCategory && (
-            <p style={{ color: "#6B5A4B", fontSize: "0.85rem", marginTop: "6px" }}>
-              AI-generated design inspirations. Click any design to enquire on WhatsApp.
-            </p>
-          )}
           {!selectedMetal && (
             <p style={{ color: "#6B5A4B", fontSize: "0.9rem", marginTop: "8px" }}>
-              Select a metal type, then browse AI-generated design inspirations.
+              Select a metal type, then browse curated jewellery designs.
             </p>
           )}
           <div style={{ width: 50, height: 3, backgroundColor: accentColor, borderRadius: 2, marginTop: "12px" }} />
         </div>
 
-        {/* Metal Selection */}
         {!selectedMetal && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "28px", maxWidth: "640px", margin: "0 auto" }}>
             <button type="button" onClick={() => setSelectedMetal("gold")}
@@ -207,7 +251,6 @@ export default function Collections({ initialMetal = null, initialGender = null 
                 <span style={{ backgroundColor: "#C8A33A", color: "#2B1A12", borderRadius: "999px", padding: "7px 24px", fontSize: "0.84rem", fontWeight: 700, display: "inline-block" }}>Explore Gold →</span>
               </div>
             </button>
-
             <button type="button" onClick={() => setSelectedMetal("silver")}
               style={{ border: "none", borderRadius: "16px", overflow: "hidden", cursor: "pointer", padding: 0, textAlign: "left", boxShadow: "0 8px 32px rgba(100,140,170,0.2)" }}>
               <div style={{ height: "180px", background: data.silver.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -222,7 +265,6 @@ export default function Collections({ initialMetal = null, initialGender = null 
           </div>
         )}
 
-        {/* Categories Grid */}
         {selectedMetal && !selectedCategory && metalData && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px" }}>
             {visibleCategories.map((cat) => (
@@ -243,7 +285,6 @@ export default function Collections({ initialMetal = null, initialGender = null 
           </div>
         )}
 
-        {/* AI Design Grid */}
         {selectedMetal && selectedCategory && metalData && (
           <DesignGrid
             category={selectedCategory}
